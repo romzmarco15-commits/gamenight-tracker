@@ -2412,10 +2412,6 @@ body[data-theme="light"] .modal { background: rgba(249,249,249,.97); }
 .players > .player { align-self: start; }
 
 /* Compact debt indicator; expanded details own the creditor breakdown. */
-.player-pending-compact{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;margin:-5px 0 12px;font-size:.78rem}
-.player-pending-compact span{color:var(--text-muted);font-weight:700}
-.player-pending-compact strong{font-weight:800;color:var(--text)}
-
 /* Pot victory presentation and collapsible final settlement */
 .game-finished-modal {position:relative;overflow-x:hidden;isolation:isolate;}
 .game-finished-modal > :not(.pot-confetti) {position:relative;z-index:1;}
@@ -2438,3 +2434,219 @@ body[data-theme="light"] .modal { background: rgba(249,249,249,.97); }
 .final-settlement-body {padding:8px 4px 12px;animation:settlementSlide .25s ease-out;}
 @keyframes settlementSlide {from{opacity:0;transform:translateY(-9px)}to{opacity:1;transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){.pot-confetti i,.pot-celebrating .pot-victory-banner,.pot-celebrating .game-finished-fire,.pot-celebrating .finished-pot-box,.final-settlement-body{animation:none!important}}
+
+/* Keep supporting ledger breakdowns secondary to recipient totals. */
+.player-settlement-person > .settlement-row:first-child{font-size:.85rem;font-weight:700}
+.player-settlement-person > .settlement-row:not(:first-child){font-size:.72rem;color:var(--text-secondary,#92929a);padding:4px 1px}
+.player-settlement-person > .settlement-row:not(:first-child) strong{font-size:.72rem;font-weight:500}
+.player-reconciliation .settlement-row{font-size:.76rem;padding:5px 1px}
+.player-reconciliation .settlement-row strong{font-size:.76rem}
+.player-reconciliation .reconciliation-warning,.player-reconciliation .reconciliation-warning strong{color:#e9a13c;font-weight:700}
+
+/* Keep long history navigable on iPad Safari. Only the current page of entries is rendered. */
+#historyLoadMoreButton[hidden] { display:none !important; }
+.history-modal { display:flex; flex-direction:column; max-height: min(88dvh, 900px); overflow:hidden; }
+.history-modal .modal-top-bar { flex:0 0 auto; }
+.history-modal .history-list { flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+.history-modal #historyLoadMoreButton, .history-modal #closeHistoryButton { flex:0 0 auto; }
+
+/* Compact final settlement, with optional expanded financial detail. */
+.game-finished-modal .settlement-panel{max-height:none;overflow:visible;margin:10px 0;padding:0 2px}
+.game-finished-modal .settlement-panel h3{margin:12px 0 8px}
+.game-finished-modal .final-settlement-details{margin:12px 0}
+.game-finished-modal .final-settlement-details summary{font-size:.88rem}
+.game-finished-modal .settlement-player-detail .settlement-row{font-size:.82rem;padding:7px 3px}
+
+/* Two-mode game setup */
+.game-mode-setup .mode-choice{display:flex;gap:12px;align-items:flex-start;padding:14px;margin-top:10px;border:1px solid var(--border-color,#555);border-radius:14px;cursor:pointer}.mode-choice input{margin-top:4px;accent-color:#72c66a}.mode-choice span{display:flex;flex-direction:column;gap:5px}.mode-choice small{opacity:.72;line-height:1.4}.mode-choice:has(input:checked){border-color:#72c66a;background:rgba(114,198,106,.08)}
+
+.player-ledger {margin:-4px 0 16px;border:1px solid var(--border);border-radius:12px;background:var(--surface-3);overflow:hidden}
+.player-ledger summary {cursor:pointer;list-style:none;padding:12px 13px;font-weight:750;font-size:12px;color:var(--text);user-select:none}
+.player-ledger summary::-webkit-details-marker{display:none}
+.player-ledger summary::after{content:"⌄";float:right;color:var(--text-muted)}
+.player-ledger[open] summary::after{content:"⌃"}
+.player-ledger-body{border-top:1px solid var(--border);padding:11px 13px}
+.player-ledger-note{font-size:11px;line-height:1.45;color:var(--text-muted);margin:10px 0 0}
+
+/* Compact player ledger toggle: expanded state survives card re-renders. */
+.player-ledger-toggle {position:absolute;top:13px;right:13px;z-index:1;border:1px solid var(--border);border-radius:11px;background:var(--surface-3, #28282b);color:var(--text);font-size:14px;line-height:1;min-width:35px;height:35px;cursor:pointer;padding:0 6px}
+.player-ledger-chevron{font-size:10px;vertical-align:top}
+.player-ledger {margin:10px 0 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface-3);overflow:hidden}
+.player-ledger[hidden]{display:none!important}
+.player-ledger-divider{height:1px;background:var(--border);margin:8px 0}
+.player-top{padding-right:35px}
+
+/* Final settlement receipt: compact celebration, unobtrusive scroll and expanded audit. */
+#gameFinishedOverlay .game-finished-modal {scrollbar-width:thin;scrollbar-color:rgba(140,140,150,.48) transparent;overscroll-behavior:contain;max-height:min(90dvh,900px);}
+#gameFinishedOverlay .game-finished-modal::-webkit-scrollbar {width:5px;}
+#gameFinishedOverlay .game-finished-modal::-webkit-scrollbar-track {background:transparent;}
+#gameFinishedOverlay .game-finished-modal::-webkit-scrollbar-thumb {background:rgba(140,140,150,.48);border-radius:20px;}
+#gameFinishedOverlay .pot-victory-banner {font-size:clamp(19px,4.5vw,28px);margin:0 auto 6px;}
+#gameFinishedOverlay .game-finished-fire {font-size:28px;margin-bottom:3px;}
+#gameFinishedOverlay .pot-win-avatar {margin:5px auto 8px;transform:scale(.85);}
+#gameFinishedOverlay #gameFinishedTitle {margin:4px auto 8px;font-size:clamp(19px,4vw,27px);line-height:1.25;}
+#gameFinishedOverlay .finished-pot-box {margin:10px 0;padding:10px 14px;}
+#gameFinishedOverlay .game-finished-pot {font-size:31px;}
+#gameFinishedOverlay .modal-subtitle {margin:10px 0;}
+.final-summary-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 20px;}
+.final-summary-grid>div {display:flex;flex-direction:column;gap:5px;padding:13px;border:1px solid var(--border);border-radius:12px;background:var(--surface-3);}
+.final-summary-grid small {font-size:11px;color:var(--text-muted);}
+.final-summary-grid strong {font-size:18px;}
+.final-breakdown-scroll {overflow-x:auto;max-width:100%;}
+.final-breakdown-table {width:100%;border-collapse:collapse;font-size:13px;text-align:right;white-space:nowrap;}
+.final-breakdown-table th,.final-breakdown-table td {padding:10px 6px;border-bottom:1px solid var(--border);}
+.final-breakdown-table th:first-child {text-align:left;}
+.final-breakdown-table thead {color:var(--text-muted);}
+#finalSettlementDetailsContent>h3 {margin:17px 0 9px;font-size:16px;}
+
+/* Fun Mode is independent from gameplay and its virtual accounting. */
+.fun-settings{display:grid;gap:12px}.fun-settings label{font-size:13px;display:grid;gap:5px}.fun-settings .fun-check{display:flex;align-items:center;gap:9px}.fun-settings select,.fun-settings input[type=text]{width:100%;padding:10px;border-radius:9px;background:var(--surface-3,#29292b);color:var(--text);border:1px solid var(--border)}
+.fun-modal{max-width:480px}.fun-sound-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.fun-sound-grid button{border:1px solid var(--border);border-radius:12px;padding:15px 8px;background:var(--surface-3,#28282b);color:var(--text);font-weight:700;cursor:pointer}.fun-sound-grid button:active{transform:scale(.97)}
+.fun-avatar-active{cursor:pointer;outline:2px solid transparent;transition:outline-color .15s}.fun-avatar-active:hover{outline-color:var(--accent,#e8be61)}
+
+/* Fun Mode: compact toggle with animated, accessible options disclosure */
+.fun-settings{display:block}
+.fun-mode-switch-row{display:flex!important;align-items:center;justify-content:space-between;gap:14px;min-height:64px;padding:11px 14px;background:var(--surface-3);border:1px solid var(--border);border-radius:13px;cursor:pointer}
+.fun-mode-switch-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fun-mode-switch-copy strong{font-size:15px;color:var(--text)}
+.fun-mode-switch-copy small{font-size:12px;color:var(--text-muted);line-height:1.4}
+.fun-mode-switch-row input[type=checkbox]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.fun-mode-switch-track{display:flex;align-items:center;flex-shrink:0;width:46px;height:27px;padding:3px;border-radius:30px;background:#55565d;transition:background .2s ease}
+.fun-mode-switch-track span{display:block;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .2s ease;box-shadow:0 1px 3px #0004}
+.fun-mode-switch-row input:checked + .fun-mode-switch-track{background:#65b85f}
+.fun-mode-switch-row input:checked + .fun-mode-switch-track span{transform:translateX(19px)}
+.fun-mode-switch-row:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+.fun-advanced{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .28s ease,opacity .24s ease,visibility .28s}
+.fun-advanced.is-open{grid-template-rows:1fr;opacity:1;visibility:visible}
+.fun-advanced-inner{overflow:hidden;min-height:0;display:grid;gap:14px;padding:0 4px;transition:padding .28s ease}
+.fun-advanced.is-open .fun-advanced-inner{padding:16px 4px 5px}
+.fun-advanced-inner>label:not(.fun-option-row){display:grid;gap:7px;font-size:13px;color:var(--text-muted)}
+.fun-advanced-inner .fun-option-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;color:var(--text);padding:8px 2px}
+.fun-option-row input[type=checkbox]{appearance:auto!important;-webkit-appearance:checkbox!important;accent-color:#70c468;width:20px!important;height:20px!important;min-width:20px;flex:none;margin:0}
+.fun-advanced-inner .sound-setting-help{margin:0;color:var(--text-muted);font-size:12px;line-height:1.5}
+@media(prefers-reduced-motion:reduce){.fun-advanced,.fun-advanced-inner,.fun-mode-switch-track,.fun-mode-switch-track span{transition:none!important}}
+
+.fun-custom-label{display:block;margin:12px 0 4px;font-size:13px;font-weight:700}
+.fun-custom-label input{display:block;width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid var(--border,#444);background:var(--surface-2,#252528);color:var(--text,#fff);font-size:15px}
+.fun-test-voice{width:100%;margin:8px 0 4px;padding:11px;border-radius:10px;background:#323238;color:inherit;border:1px solid #51515b;font-weight:700}
+
+/* iOS-inspired settings controls: consistent with the primary Fun Mode switch. */
+.fun-advanced-inner .fun-option-row{min-height:52px;padding:10px 12px;border:1px solid var(--border);border-radius:13px;background:var(--surface-3);cursor:pointer;font-size:14px}
+.fun-option-switch{position:relative;display:inline-flex;flex:none;align-items:center}
+.fun-advanced-inner .fun-option-switch input[type=checkbox]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;margin:0!important}
+.fun-option-track{width:46px;height:27px;padding:3px;border-radius:30px;background:#63656c;display:flex;align-items:center;transition:background .2s ease}
+.fun-option-track>span{width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0004;transition:transform .2s ease}
+.fun-option-switch input:checked + .fun-option-track{background:#34c759}
+.fun-option-switch input:checked + .fun-option-track>span{transform:translateX(19px)}
+.fun-option-row:has(input:focus-visible){outline:2px solid #0a84ff;outline-offset:2px}
+.bonus-settings-row{align-items:center;gap:9px}
+.bonus-settings-row button[data-remove-bonus]{flex:0 0 34px;width:34px;height:34px;min-width:34px;display:grid;place-items:center;padding:0!important;border-radius:50%;border:1px solid rgba(255,69,58,.28);background:rgba(255,69,58,.13);color:#ff453a;font-size:24px;font-weight:400;line-height:1;box-shadow:none;transition:background .15s,transform .15s}
+.bonus-settings-row button[data-remove-bonus]:active{transform:scale(.91);background:rgba(255,69,58,.24)}
+.bonus-settings-row button[data-remove-bonus]:focus-visible{outline:2px solid #0a84ff;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.fun-option-track,.fun-option-track>span,.bonus-settings-row button[data-remove-bonus]{transition:none}}
+
+/* CLASSIC JACKPOT POT — lightweight, self-contained CSS artwork */
+#jackpotVisual.pot-visual {width:190px;height:142px;margin:9px auto 8px;isolation:isolate;transform:none}
+.jackpot-halo{position:absolute;inset:12px 6px 5px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,185,36,.24),transparent 70%);filter:blur(8px);opacity:.45;transition:opacity .5s}
+.jackpot-body{position:absolute;z-index:4;bottom:4px;left:29px;width:132px;height:94px;border-radius:28% 28% 42% 42% / 22% 22% 55% 55%;border:3px solid #703715;background:radial-gradient(ellipse at 30% 27%,#e7a051 0%,#b66a2f 26%,#7b381c 64%,#492416 100%);box-shadow:inset -12px -6px 16px rgba(40,16,8,.46),inset 6px 2px 8px rgba(255,203,115,.4),0 9px 14px rgba(0,0,0,.24)}
+.jackpot-body:before,.jackpot-body:after{content:'';position:absolute;top:16px;width:18px;height:29px;border:6px solid #9e5829;border-radius:50%;z-index:-1}
+.jackpot-body:before{left:-18px}.jackpot-body:after{right:-18px}
+.jackpot-shine{position:absolute;left:15px;top:12px;width:22px;height:45px;border-radius:50%;transform:rotate(17deg);background:linear-gradient(90deg,rgba(255,227,154,.4),transparent)}
+.jackpot-emblem{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);font-size:28px;color:#f7b94c;text-shadow:0 2px 4px #603017}
+.jackpot-rim-back{position:absolute;z-index:2;left:26px;bottom:85px;width:138px;height:29px;border-radius:50%;border:5px solid #81431d;background:#351a0f;box-shadow:0 -2px 0 #f3bb67}
+.jackpot-rim-front{position:absolute;z-index:7;left:27px;bottom:80px;width:136px;height:26px;border-radius:50%;border-bottom:11px solid #bb7338;border-left:4px solid transparent;border-right:4px solid transparent;pointer-events:none;filter:drop-shadow(0 2px 1px #713917)}
+.jackpot-money{position:absolute;z-index:3;left:20px;bottom:90px;width:150px;height:56px;transition:transform .5s ease;transform:translateY(calc((100% - var(--jackpot-level,0%)) * .45));pointer-events:none}
+.jackpot-coin,.jackpot-bill{position:absolute;display:block;line-height:1;filter:drop-shadow(0 2px 2px #4e260e)}
+.jackpot-coin{font-size:31px}.jackpot-bill{font-size:34px;opacity:0;transition:opacity .4s}
+.jackpot-coin.c1{left:21px;bottom:0;transform:rotate(-22deg)}.jackpot-coin.c2{left:50px;bottom:6px;transform:rotate(15deg)}.jackpot-coin.c3{left:83px;bottom:0;transform:rotate(-12deg)}
+.jackpot-coin.c4{left:39px;bottom:26px;transform:rotate(22deg)}.jackpot-coin.c5{left:71px;bottom:28px;transform:rotate(-25deg)}.jackpot-coin.c6{left:99px;bottom:23px;transform:rotate(15deg)}
+.jackpot-bill.b1{left:7px;bottom:31px;transform:rotate(-27deg)}.jackpot-bill.b2{right:1px;bottom:31px;transform:rotate(24deg)}
+#jackpotVisual[data-stage="low"] .c4,#jackpotVisual[data-stage="low"] .c5,#jackpotVisual[data-stage="low"] .c6{opacity:0}
+#jackpotVisual[data-stage="growing"] .c6{opacity:0}
+#jackpotVisual[data-stage="full"] .jackpot-bill,#jackpotVisual[data-stage="overflow"] .jackpot-bill{opacity:1}
+#jackpotVisual[data-stage="full"] .jackpot-halo,#jackpotVisual[data-stage="overflow"] .jackpot-halo{opacity:1}
+.jackpot-overflow{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity .4s}
+#jackpotVisual[data-stage="overflow"] .jackpot-overflow{opacity:1}
+.overflow-coin,.overflow-bill{position:absolute;display:block;line-height:1;filter:drop-shadow(0 2px 2px #5c2c11)}.overflow-coin{font-size:25px}.overflow-bill{font-size:29px}
+.oc1{left:3px;top:33px;transform:rotate(-25deg)}.oc2{right:0;top:39px;transform:rotate(28deg)}.oc3{left:74px;top:0}.ob1{left:9px;top:1px;transform:rotate(-24deg)}.ob2{right:8px;top:4px;transform:rotate(20deg)}
+.jackpot-burst{position:absolute;inset:0;z-index:9;pointer-events:none}
+#jackpotVisual.jackpot-added{animation:jackpotWobble .55s ease-out}
+#jackpotVisual.jackpot-added .jackpot-halo{opacity:1}
+#jackpotVisual.jackpot-added[data-stage="overflow"] .overflow-coin,#jackpotVisual.jackpot-added[data-stage="overflow"] .overflow-bill{animation:jackpotBounce .75s ease-out both}
+#jackpotVisual.jackpot-added[data-stage="overflow"] .oc2,#jackpotVisual.jackpot-added[data-stage="overflow"] .ob2{animation-delay:.08s}
+@keyframes jackpotWobble{0%,100%{rotate:0deg}25%{rotate:-3deg}55%{rotate:3deg}80%{rotate:-1deg}}
+@keyframes jackpotBounce{0%{translate:0 12px;scale:.75;opacity:.4}45%{translate:0 -19px;scale:1.15;opacity:1}100%{translate:0 0;scale:1;opacity:1}}
+@media(max-width:480px){#jackpotVisual.pot-visual{margin:3px auto 3px;scale:.9}}
+@media(prefers-reduced-motion:reduce){#jackpotVisual,#jackpotVisual *{animation:none!important;transition:none!important}}
+/* Game Night multi-game shell and shared iOS visual language */
+.gn-home,.mj-screen{min-height:100dvh;background:var(--bg,#0f1115);color:var(--text,#f7f7fa);padding:calc(env(safe-area-inset-top) + 22px) 16px calc(env(safe-area-inset-bottom) + 28px)}
+.gn-brand{text-align:center;padding:36px 0 26px}.gn-brand span{font-size:52px}.gn-brand h1{font-size:32px;margin:12px 0 5px}.gn-brand p,.gn-home-foot,.mj-muted{opacity:.7;font-size:13px}.gn-home-foot{text-align:center;margin-top:25px}.gn-game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:850px;margin:auto}.gn-game-tile,.mj-panel{background:var(--card,#20242b);border:1px solid rgba(150,160,175,.19);border-radius:23px;padding:19px;box-shadow:0 7px 24px #0001}.gn-game-emoji{font-size:64px;text-align:center;padding:20px 0}.gn-game-tile h2{margin:5px 0;font-size:21px}.gn-game-tile p{font-size:13px;opacity:.7;min-height:48px}.gn-game-tile button{width:100%;margin-top:10px}.gn-sub-button,.gn-home-link{border:1px solid rgba(150,160,175,.25);border-radius:14px;padding:11px 14px;background:rgba(130,140,160,.13);color:inherit;font-weight:650;cursor:pointer}.gn-home-link{padding:8px 12px;font-size:12px}.mj-header{max-width:720px;margin:auto;display:flex;align-items:center;gap:12px;padding-bottom:22px}.mj-header h1{font-size:19px;flex:1;margin:0}.mj-header span{font-size:12px;opacity:.7}.mj-container{max-width:720px;margin:auto;display:grid;gap:14px}.mj-container h2{margin:0}.mj-panel h3{margin:0 0 12px;font-size:17px}.mj-panel h4{margin:12px 0 7px}.mj-field{display:grid;gap:6px;font-size:13px;font-weight:600;margin:10px 0}.mj-field input,.mj-field select,.mj-bonus-edit input,.mj-bonus-edit select{min-width:0;width:100%;background:var(--input-bg,#151820);color:inherit;border:1px solid rgba(140,150,160,.35);border-radius:12px;padding:12px;font:inherit;font-size:16px}.mj-count{display:flex;align-items:center;justify-content:center;gap:26px}.mj-count button{border-radius:50%;height:44px;width:44px;border:0;font-size:23px;background:#3478f6;color:white}.mj-name-grid,.mj-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.mj-switch{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative}.mj-switch small{display:block;opacity:.6;margin-top:5px}.mj-switch input{position:absolute;opacity:0;right:0}.mj-track{width:50px;height:30px;background:#7778;border-radius:20px;position:relative;flex-shrink:0;transition:background .2s}.mj-track:before{content:'';position:absolute;width:24px;height:24px;top:3px;left:3px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px #0003}.mj-switch input:checked+.mj-track{background:#34c759}.mj-switch input:checked+.mj-track:before{transform:translateX(20px)}.mj-switch input:focus-visible+.mj-track{outline:3px solid #69a4ff}.mj-bonus-edit{display:grid;grid-template-columns:1.2fr .65fr 1fr 36px;gap:6px;align-items:center;margin:8px 0}.mj-bonus-edit input,.mj-bonus-edit select{padding:9px 5px;font-size:13px}.mj-remove{width:34px;height:34px;border:0;border-radius:50%;background:#ff453a20;color:#ff453a;font-size:24px}.mj-wide{width:100%}.mj-cards{margin-top:4px}.mj-player{text-align:center;border-radius:20px;background:var(--card,#20242b);padding:16px 7px;display:grid;gap:5px}.mj-face{font-size:32px}.mj-player b{font-size:21px}.mj-positive{color:#32d783}.mj-negative{color:#ff6868}.mj-pot{text-align:center;font-size:28px;font-weight:750}.mj-bonus-pick{display:flex;gap:12px;align-items:center;padding:10px 0}.mj-bonus-pick input{accent-color:#3478f6;width:20px;height:20px}.mj-preview{background:#8882;border-radius:13px;padding:12px;margin:12px 0;font-size:13px}.mj-preview>div,.mj-history>div,.mj-dialog-card #mjSettlementList>div{display:flex;justify-content:space-between;gap:8px;padding:6px 0}.mj-actions{display:flex;gap:8px;flex-wrap:wrap}.mj-history{font-size:13px}.mj-history>div{border-bottom:1px solid #8882}.mj-dialog{position:fixed;inset:0;background:#0009;display:grid;place-items:center;z-index:10000;padding:16px}.mj-dialog-card{width:min(100%,460px);background:var(--card,#20242b);color:inherit;border-radius:25px;padding:24px}.mj-flying-money{position:fixed;z-index:10001;font-size:26px;pointer-events:none;animation:mj-fly .8s ease-in forwards}@keyframes mj-fly{to{transform:translate(var(--dx),var(--dy)) scale(.6);opacity:0}}.hidden,[hidden]{display:none!important}@media(max-width:480px){.gn-game-grid{grid-template-columns:1fr}.gn-game-emoji{padding:4px;font-size:48px}.gn-game-tile p{min-height:0}.mj-bonus-edit{grid-template-columns:1fr 70px 95px 32px}}
+
+/* Game Night iOS surfaces: explicit theme colors, not undefined --card variables. */
+.gn-home,.mj-screen{background:var(--bg);color:var(--text)}
+.gn-game-tile,.mj-panel,.mj-player,.mj-dialog-card{background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow)}
+.gn-game-tile h2,.gn-game-tile p,.gn-game-tile button,.mj-panel h3,.mj-panel h4{color:inherit}
+.gn-game-tile p,.gn-brand p,.gn-home-foot,.mj-muted{color:var(--text-soft);opacity:1}
+.gn-game-tile .primary-button,.mj-main-actions .primary-button{background:#34a853;color:#fff}
+.gn-game-tile .gn-sub-button,.mj-main-actions .gn-sub-button{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.mj-field input,.mj-field select,.mj-bonus-edit input,.mj-bonus-edit select{background:var(--surface-2);color:var(--text);border-color:var(--border)}
+.gn-game-tile{display:flex;flex-direction:column;min-height:345px;gap:7px}
+.gn-game-tile p{flex:1;min-height:0}
+.gn-game-emoji{padding:12px 0 5px}
+.mj-main-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mj-main-actions button{min-height:58px;border-radius:16px;font-size:15px;font-weight:750}
+.mj-form-panel{margin:0;box-shadow:none;border:0;padding:4px 0;background:transparent}
+.mj-action-card{max-height:min(86dvh,790px);overflow-y:auto;overscroll-behavior:contain;width:min(100%,510px);padding:20px}
+.mj-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;font-size:18px}
+.mj-dialog-close{width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--surface-2);color:var(--text);font-size:15px}
+.mj-dialog{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body[data-theme="light"] .gn-game-tile,body[data-theme="light"] .mj-panel,body[data-theme="light"] .mj-player{box-shadow:0 6px 22px rgba(30,40,60,.07)}
+@media(max-width:480px){.gn-game-tile{min-height:0}.gn-game-grid{gap:12px}.mj-main-actions button{font-size:14px}.mj-action-card{padding:17px}}
+
+/* Mahjong action forms and history must never appear inline.
+   Only the selected panel inside the modal is displayed. */
+#mahjongGameScreen .mj-form-panel,
+#mahjongGameScreen .mj-history-panel{display:none!important}
+#mjActionSlot>.mj-form-panel,
+#mjActionSlot>.mj-history-panel{display:block!important}
+#mjActionSlot>.mj-form-panel{background:transparent;box-shadow:none;border:0;padding:0}
+#mjActionSlot>.mj-history-panel{background:transparent;box-shadow:none;border:0;padding:0}
+#mjActionSlot .mj-history{max-height:60dvh;overflow:auto}
+.mj-actions button{min-height:44px;border-radius:13px}
+
+/* Mahjong: consistent Tongits-style player actions and top-right controls */
+.mj-header-tools{display:flex;gap:8px;align-items:center}.mj-header-tools .icon-button{flex:none;width:42px;height:42px;border-radius:14px;background:var(--surface);color:var(--text);border:1px solid var(--border);font-size:20px}
+.mj-player{border:1px solid var(--border);box-shadow:var(--shadow);padding:15px 12px;gap:9px}.mj-player-win{border:0;border-radius:14px;background:#34a853;color:white;font-size:14px;font-weight:800;min-height:45px;margin-top:4px;cursor:pointer}.mj-player-win:active{transform:scale(.97)}
+.mj-main-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.mj-main-actions button{min-height:52px}
+.mj-game-settings-host{display:none!important}.mj-settings-group{padding:14px 0;border-top:1px solid var(--border)}.mj-settings-group:first-of-type{border:0}.mj-settings-group h4{margin:0 0 12px}.mj-settings-group .mj-switch{padding:10px 0}.mj-settings-group .mj-field{margin:12px 0}.mj-settings-group #mjSettings{display:block!important}.mj-settings-group #mjSettings>.mj-panel{padding:0;border:0;box-shadow:none;background:transparent}.mj-rule-line{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}.mj-rule-line span{text-align:right}.mj-danger{color:#ff453a!important}.mj-action-card{max-height:85dvh;overflow:auto}.mj-dialog-card{color:var(--text)}
+@media(max-width:480px){.mj-header{gap:7px}.mj-header h1{font-size:17px}.mj-header-tools .icon-button{width:39px;height:39px}.mj-player-win{font-size:13px}}
+
+.mj-face[data-mj-avatar]{cursor:pointer;display:grid;place-items:center;width:56px;height:56px;margin:auto;border-radius:50%;background:var(--surface-2);border:1px solid var(--border)}.mj-face[data-mj-avatar]:active{transform:scale(.96)}.mj-soundboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mj-soundboard-grid button{border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:14px;padding:13px 8px;font-weight:700}.mj-settings-group #mjSettings{margin:0}
+
+/* Mahjong: player WIN button owns winner selection; show a read-only identity. */
+.mj-selected-winner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;margin:10px 0 16px;border-radius:15px;background:var(--surface-2);border:1px solid var(--border)}
+.mj-selected-winner span{font-size:13px;opacity:.7}.mj-selected-winner strong{font-size:17px;color:var(--text);text-align:right}
+
+/* Mahjong — iOS-style multi-select bonus chips and detailed transaction history */
+#mjWinBonuses{display:grid;gap:9px;margin:12px 0}
+#mjWinBonuses .mj-bonus-pick{position:relative;display:flex;align-items:center;gap:12px;min-height:62px;padding:12px 14px;margin:0;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);cursor:pointer;transition:background .18s,border-color .18s,transform .12s;-webkit-tap-highlight-color:transparent}
+#mjWinBonuses .mj-bonus-pick:active{transform:scale(.99)}
+#mjWinBonuses .mj-bonus-pick.is-selected{border-color:#34c759;background:color-mix(in srgb,#34c759 10%,var(--surface))}
+#mjWinBonuses .mj-bonus-pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+#mjWinBonuses .mj-bonus-check{width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;border:2px solid #8e8e93;border-radius:9px;color:transparent;background:var(--surface);font-weight:800;font-size:17px;transition:all .15s}
+#mjWinBonuses .is-selected .mj-bonus-check{background:#34c759;border-color:#34c759;color:#fff}
+#mjWinBonuses .mj-bonus-pick:has(input:focus-visible){outline:3px solid #579aff;outline-offset:2px}
+#mjWinBonuses .mj-bonus-info{display:grid;gap:4px;min-width:0}
+#mjWinBonuses .mj-bonus-info strong{font-size:14px;color:var(--text)}
+#mjWinBonuses .mj-bonus-info small{font-size:12px;color:var(--text);opacity:.7}
+#mjActionSlot .mj-history{display:grid;gap:12px;max-height:65dvh;overflow-y:auto;padding:2px 2px 12px}
+#mjActionSlot .mj-history>.mj-history-entry{display:block;border:1px solid var(--border);border-radius:16px;padding:14px;background:var(--surface-2)}
+.mj-history-heading{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:14px}
+.mj-history-heading>span{font-weight:750;white-space:nowrap;color:#27ad61}
+.mj-history-meta{font-size:12px;line-height:1.5;opacity:.72;margin-top:7px}
+.mj-history-subtitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.65;margin:13px 0 4px}
+.mj-history-transfer{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--border);font-size:13px;line-height:1.4}
+.mj-history-transfer:first-of-type{border-top:0}
+.mj-history-transfer strong{white-space:nowrap}
+.mj-history-transfer small{opacity:.65}
+@media(max-width:480px){#mjActionSlot .mj-history{max-height:62dvh}}
