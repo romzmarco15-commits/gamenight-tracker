@@ -1,8 +1,4 @@
-const AVATARS = [
-    "😎", "🤓", "🧑", "👩",
-    "🐼", "🐯", "🐸", "👽",
-    "😈", "🤠", "🥸", "🦁"
-];
+const AVATARS = GameNightAvatar.emojis;
 
 const MIN_PLAYERS = 2;
 const MAX_PLAYERS = 6;
@@ -474,160 +470,21 @@ function activateSelectOnFocus() {
 ========================================= */
 
 function openAvatarPicker(playerIndex) {
-    avatarEditingPlayer =
-        playerIndex;
-
-    const container =
-        document.getElementById(
-            "avatarChoices"
-        );
-
-    container.innerHTML = "";
-
-    const current =
-        setupPlayerData[
-            playerIndex
-        ].avatar;
-
-    AVATARS.forEach(emoji => {
-
-        const button =
-            document.createElement(
-                "button"
-            );
-
-        button.type = "button";
-
-        button.className =
-            "avatar-picker-button";
-
-        if (
-            current?.type === "emoji" &&
-            current.value === emoji
-        ) {
-            button.classList.add(
-                "selected"
-            );
-        }
-
-        button.textContent = emoji;
-
-        button.addEventListener(
-            "click",
-            function () {
-
-                setupPlayerData[
-                    avatarEditingPlayer
-                ].avatar =
-                    createEmojiAvatar(
-                        emoji
-                    );
-
-                closeOverlay(
-                    "avatarOverlay"
-                );
-
-                avatarEditingPlayer =
-                    null;
-
-                renderSetupPlayers();
-            }
-        );
-
-        container.appendChild(
-            button
-        );
-    });
-
-    openOverlay("avatarOverlay");
-}
-
-function resizePlayerPhoto(file) {
-    return new Promise(
-        (resolve, reject) => {
-
-            const reader =
-                new FileReader();
-
-            reader.onload =
-                function (event) {
-
-                    const image =
-                        new Image();
-
-                    image.onload =
-                        function () {
-
-                            const size = 320;
-
-                            const canvas =
-                                document.createElement(
-                                    "canvas"
-                                );
-
-                            canvas.width = size;
-                            canvas.height = size;
-
-                            const ctx =
-                                canvas.getContext(
-                                    "2d"
-                                );
-
-                            const sourceSize =
-                                Math.min(
-                                    image.width,
-                                    image.height
-                                );
-
-                            const sourceX =
-                                (
-                                    image.width -
-                                    sourceSize
-                                ) / 2;
-
-                            const sourceY =
-                                (
-                                    image.height -
-                                    sourceSize
-                                ) / 2;
-
-                            ctx.drawImage(
-                                image,
-
-                                sourceX,
-                                sourceY,
-
-                                sourceSize,
-                                sourceSize,
-
-                                0,
-                                0,
-
-                                size,
-                                size
-                            );
-
-                            resolve(
-                                canvas.toDataURL(
-                                    "image/jpeg",
-                                    0.72
-                                )
-                            );
-                        };
-
-                    image.onerror =
-                        reject;
-
-                    image.src =
-                        event.target.result;
-                };
-
-            reader.onerror = reject;
-
-            reader.readAsDataURL(file);
+    avatarEditingPlayer = playerIndex;
+    GameNightAvatar.renderChoices(
+        document.getElementById('avatarChoices'),
+        setupPlayerData[playerIndex].avatar,
+        avatar => {
+            setupPlayerData[playerIndex].avatar = avatar;
+            closeOverlay('avatarOverlay');
+            avatarEditingPlayer = null;
+            renderSetupPlayers();
         }
     );
+    openOverlay('avatarOverlay');
 }
+
+function resizePlayerPhoto(file) { return GameNightAvatar.resizePhoto(file); }
 
 
 /* =========================================

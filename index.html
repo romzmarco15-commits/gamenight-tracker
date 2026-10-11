@@ -32,6 +32,8 @@
   <div class="gn-game-grid">
     <div class="gn-game-tile"><div class="gn-game-emoji">🃏</div><h2>Tongits</h2><p>Pot, fights, bonuses and jackpot celebrations</p><button id="homeTongits" class="primary-button">Play Tongits</button><button id="homeTongitsResume" class="gn-sub-button hidden">Continue Tongits</button></div>
     <div class="gn-game-tile"><div class="gn-game-emoji">🀄</div><h2>Filipino Mahjong</h2><p>Custom payments, optional pot and special hands</p><button id="homeMahjong" class="primary-button">New Mahjong</button><button id="homeMahjongResume" class="gn-sub-button hidden">Continue Mahjong</button></div>
+    <div class="gn-game-tile gn-coming-soon" aria-label="Lucky 9, coming soon"><div class="gn-game-emoji" aria-hidden="true">🎴</div><h2>Lucky 9</h2><p>Coming soon</p><span class="gn-unavailable" aria-disabled="true">In Development</span></div>
+    <div class="gn-game-tile gn-coming-soon" aria-label="Pusoy, coming soon"><div class="gn-game-emoji" aria-hidden="true">♠️</div><h2>Pusoy</h2><p>Coming soon</p><span class="gn-unavailable" aria-disabled="true">In Development</span></div>
   </div><p class="gn-home-foot">Your Tongits and Mahjong sessions are saved separately on this device.</p>
 </section>
 <!-- =====================================
@@ -67,10 +69,10 @@
         >
             Choose your players. All scores settle at the end.
         </p>
-<div class="setup-card">
+<div class="setup-card gn-tongits-players-panel">
 
             <h3>
-                Number of Players
+                Players
             </h3>
 
             <div class="player-count-control">
@@ -101,13 +103,11 @@
             </div>
 
             <div class="player-count-note">
-                2–6 players
+                2–6 players · 3 is standard
             </div>
 
-        </div>
-
-
         <div id="setupPlayers"></div>
+        </div>
 
 
         <div class="setup-card">
@@ -1052,9 +1052,7 @@
 
         <div class="settings-divider"></div>
 
-        <div class="settings-section-title">
-            GAME RULES
-        </div>
+        <details class="gn-settings-disclosure" id="tongitsRulesDisclosure"><summary>🎮 Game Rules <span>Draw, Tongits, pot & bonuses</span></summary><div class="gn-settings-disclosure-content">
 
 
         <div class="field">
@@ -1158,8 +1156,9 @@
         </button>
 
 
+        </div></details>
         <div class="settings-divider"></div>
-
+        <div class="settings-section-title">GAME MANAGEMENT</div>
 
         <button
             id="editPlayersButton"
@@ -1484,22 +1483,28 @@
 </div>
 
 <section id="mahjongSetupScreen" class="hidden mj-screen">
-<header class="mj-header"><button id="mjBackHome" class="gn-home-link">← Games</button><h1>🀄 Filipino Mahjong</h1></header>
+<header class="mj-header"><h1>🀄 Filipino Mahjong</h1><button id="mjBackHome" class="gn-home-link" type="button">⌂ Games</button></header>
 <main class="mj-container"><h2>New Mahjong Game</h2><p class="mj-muted">Configure house rules before playing. You can change future-round rules later.</p>
 <div class="mj-panel"><h3>Players</h3><div class="mj-count"><button id="mjMinus">−</button><strong id="mjPlayerCount">4</strong><button id="mjPlus">+</button></div><p class="mj-muted">2–4 players · 4 is standard</p><div id="mjNames" class="mj-name-grid"></div></div>
 <div class="mj-panel"><h3>Winning payments</h3><label class="mj-field">Allowed payment methods<select id="mjPayment"><option value="both">Both — choose each round</option><option value="all">Everyone pays</option><option value="one">One player pays</option></select></label><label class="mj-field">Default payment per payer<input id="mjBase" type="number" min="0" step="1" value="10"></label><label class="mj-field">Currency<select id="mjCurrency"><option value="S$">S$ Singapore Dollar</option><option value="₱">₱ Philippine Peso</option><option value="$">$ Dollar</option><option value="RM">RM Malaysian Ringgit</option></select></label></div>
 <div class="mj-panel"><label class="mj-switch"><span><strong>🪙 Optional Pot</strong><small>Off by default</small></span><input id="mjPotEnabled" type="checkbox"><span class="mj-track"></span></label><div id="mjPotOptions" hidden><label class="mj-field">Initial pot per player<input id="mjInitial" type="number" min="0" step="1" value="4"></label><label class="mj-field">Contribution per player per round<input id="mjPerRound" type="number" min="0" step="1" value="2"></label><label class="mj-field">Award pot<select id="mjPotAward"><option value="manual">Manually choose the winner</option></select></label></div></div>
 <div class="mj-panel"><h3>Special hand bonuses</h3><p class="mj-muted">Players select earned bonuses each round.</p><div id="mjBonusEditor"></div><button id="mjAddBonus" class="gn-sub-button" type="button">＋ Add Bonus Type</button></div>
 <button id="mjStart" class="primary-button mj-wide">Start Mahjong</button></main></section>
-<section id="mahjongGameScreen" class="hidden mj-screen"><header class="mj-header"><button id="mjGameHome" class="gn-home-link">← Games</button><h1>🀄 Mahjong</h1><span id="mjRound">Round 1</span><div class="mj-header-tools"><button id="mjHeaderRules" class="icon-button" type="button" aria-label="Mahjong rules">?</button><button id="mjHeaderSettings" class="icon-button" type="button" aria-label="Mahjong settings">⚙️</button></div></header>
+<section id="mahjongGameScreen" class="hidden mj-screen"><header class="mj-header"><h1>🀄 Mahjong</h1><button id="mjGameHome" class="gn-home-link" type="button">⌂ Games</button><span id="mjRound">Round 1</span><div class="mj-header-tools"><button id="mjHeaderRules" class="icon-button" type="button" aria-label="Mahjong rules">?</button><button id="mjHeaderSettings" class="icon-button" type="button" aria-label="Mahjong settings">⚙️</button></div></header>
 <main class="mj-container"><div id="mjCards" class="mj-cards"></div><div class="mj-main-actions"><button id="mjOpenQuick" class="gn-sub-button">💸 Quick Pay</button><button id="mjOpenHistory" class="gn-sub-button">📜 History</button><button id="mjUndo" class="gn-sub-button">↶ Undo</button><button id="mjSettlement" class="gn-sub-button">💰 View Settlement</button></div><div id="mjPotPanel" class="mj-panel"><div id="mjPotDisplay" class="mj-pot">🪙 Pot</div><label class="mj-field">Award pot to<select id="mjPotWinner"></select></label><button id="mjAward" class="gn-sub-button">🏆 Award Pot</button></div>
 <div class="mj-panel mj-form-panel" id="mjWinPanel"><h3>🀄 Record Win</h3><div class="mj-selected-winner" aria-live="polite"><span>Winning player</span><strong id="mjWinnerName">Player 1</strong></div><select id="mjWinner" hidden aria-hidden="true" tabindex="-1"></select><label class="mj-field">Who pays?<select id="mjPaymentMode"><option value="all">Everyone else</option><option value="one">One player</option></select></label><div id="mjPayerWrap"><label class="mj-field">Selected paying player<select id="mjPayer"></select></label></div><label class="mj-field">Base amount per payer<input id="mjWinBase" type="number" min="0" step="1"></label><h4>Earned bonuses</h4><div id="mjWinBonuses"></div><div id="mjPreview" class="mj-preview"></div><button id="mjRecord" class="primary-button mj-wide">Confirm Win</button></div>
 <div class="mj-panel mj-form-panel" id="mjQuickPanel"><h3>💸 Quick Pay</h3><div class="mj-name-grid"><label class="mj-field">From<select id="mjPayFrom"></select></label><label class="mj-field">To<select id="mjPayTo"></select></label></div><label class="mj-field">Amount<input id="mjPayAmount" type="number" min="0" step="1" value="1"></label><button id="mjQuickPay" class="gn-sub-button">Transfer Money</button></div>
 <div class="mj-panel mj-game-settings-host"><h3>Game actions</h3><div class="mj-actions"></div><p id="mjStatus" class="mj-muted" role="status"></p><div id="mjSettings" class="hidden"><p class="mj-muted">Changes apply to future rounds only. Player count and initial contributions cannot change mid-game.</p><div class="mj-panel"><label class="mj-field">Default win payment<input id="mjSettingsBase" type="number" min="0" step="1"></label><label class="mj-field">Payment methods<select id="mjSettingsPayment"><option value="both">Both</option><option value="all">Everyone</option><option value="one">One payer</option></select></label><label class="mj-switch"><span><strong>Enable pot</strong></span><input id="mjSettingsPotEnabled" type="checkbox"><span class="mj-track"></span></label><label class="mj-field">Contribution per round<input id="mjSettingsPerRound" type="number" min="0" step="1"></label><h4>Bonuses</h4><div id="mjSettingsBonusEditor"></div><button id="mjSettingsAddBonus" class="gn-sub-button">＋ Add Bonus Type</button><button id="mjSaveSettings" class="primary-button mj-wide">Save Future Rules</button></div></div></div>
 <div class="mj-panel mj-history-panel" id="mjHistoryPanel"><h3>📜 Game History</h3><div id="mjHistory" class="mj-history"></div></div></main></section>
+<div id="mjAvatarDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Choose Mahjong player avatar during setup">
+<div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong id="mjAvatarTitle">Player Photo</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjAvatarDialog" aria-label="Close">✕</button></div>
+<p class="mj-muted">Choose an emoji or upload a photo. The photo is saved on this device with your Mahjong session.</p>
+<div id="mjAvatarEmojis" class="mj-avatar-emojis"></div>
+<label class="mj-upload-photo" for="mjAvatarFile">📷 Upload Photo</label><input id="mjAvatarFile" type="file" accept="image/*" hidden>
+<button type="button" id="mjAvatarReset" class="gn-sub-button mj-wide">Reset to Emoji</button></div></div>
 <div id="mjFunDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong soundboard"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong id="mjFunTitle">🎭 Soundboard</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjFunDialog" aria-label="Close">✕</button></div><label class="mj-field">Custom line for this player<input id="mjFunCustomLine" maxlength="180" placeholder="Hey {name}, hurry up!"></label><p class="mj-muted">Use {name} for the player's name.</p><div class="mj-soundboard-grid"><button data-mj-fun="hurry">⏰ Hurry Up</button><button data-mj-fun="crickets">🦗 Crickets</button><button data-mj-fun="roast">💀 Roast</button><button data-mj-fun="laugh">😂 Laugh</button><button data-mj-fun="clap">👏 Slow Clap</button><button data-mj-fun="hype">🏆 Hype</button><button data-mj-fun="custom">🎤 Custom Line</button><button data-mj-fun="stop">🔇 Stop</button></div></div></div>
 <div id="mjRulesDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong rules"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong>🀄 Mahjong Rules</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjRulesDialog" aria-label="Close">✕</button></div><div id="mjRulesContent"></div></div></div>
-<div id="mjSettingsDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong settings"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong>⚙️ Mahjong Settings</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjSettingsDialog" aria-label="Close">✕</button></div><div class="mj-settings-group"><h4>Appearance</h4><label class="mj-field">Theme<select id="mjTheme"><option value="light">☀️ Light</option><option value="dark">🌙 Dark</option></select></label></div><div class="mj-settings-group"><h4>🎭 Fun Mode</h4><label class="mj-switch"><span><strong>Enable Fun Mode</strong><small>Shared with Tongits</small></span><input id="mjFunEnabled" type="checkbox"><span class="mj-track"></span></label><div id="mjFunOptions" class="hidden"><label class="mj-field">Commentator language<select id="mjFunLanguage"><option value="taglish">Taglish</option><option value="english">English</option><option value="tagalog">Tagalog</option></select></label><label class="mj-field">Roast level<select id="mjFunIntensity"><option value="friendly">Friendly</option><option value="savage">Savage but funny</option><option value="extra">Extra savage</option></select></label><label class="mj-switch"><span>Spoken commentary</span><input id="mjFunVoice" type="checkbox"><span class="mj-track"></span></label><label class="mj-switch"><span>Occasional reactions</span><input id="mjFunRandom" type="checkbox"><span class="mj-track"></span></label><label class="mj-field">Voice<select id="mjFunVoiceChoice"><option value="auto">Automatic</option></select></label><button id="mjFunTest" class="gn-sub-button" type="button">🔊 Test voice</button></div></div><div class="mj-settings-group"><h4>Mahjong house rules</h4><div id="mjSettingsSlot"></div></div><div class="mj-settings-group"><h4>Game data</h4><button id="mjClearGame" class="gn-sub-button mj-danger" type="button">🗑 Clear Mahjong Game</button><p class="mj-muted">Only Mahjong session data is deleted. Tongits remains saved.</p></div></div></div>
+<div id="mjSettingsDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong settings"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong>⚙️ Mahjong Settings</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjSettingsDialog" aria-label="Close">✕</button></div><div class="mj-settings-group mj-legacy-settings" hidden aria-hidden="true"><h4>Appearance</h4><label class="mj-field">Theme<select id="mjTheme"><option value="light">☀️ Light</option><option value="dark">🌙 Dark</option></select></label></div><div class="mj-settings-group mj-legacy-settings" hidden aria-hidden="true"><h4>🎭 Fun Mode</h4><label class="mj-switch"><span><strong>Enable Fun Mode</strong><small>Shared with Tongits</small></span><input id="mjFunEnabled" type="checkbox"><span class="mj-track"></span></label><div id="mjFunOptions" class="hidden"><label class="mj-field">Commentator language<select id="mjFunLanguage"><option value="taglish">Taglish</option><option value="english">English</option><option value="tagalog">Tagalog</option></select></label><label class="mj-field">Roast level<select id="mjFunIntensity"><option value="friendly">Friendly</option><option value="savage">Savage but funny</option><option value="extra">Extra savage</option></select></label><label class="mj-switch"><span>Spoken commentary</span><input id="mjFunVoice" type="checkbox"><span class="mj-track"></span></label><label class="mj-switch"><span>Occasional reactions</span><input id="mjFunRandom" type="checkbox"><span class="mj-track"></span></label><label class="mj-field">Voice<select id="mjFunVoiceChoice"><option value="auto">Automatic</option></select></label><button id="mjFunTest" class="gn-sub-button" type="button">🔊 Test voice</button></div></div><div id="mjSharedSettings" class="mj-shared-settings"></div><div class="mj-settings-group"><div class="settings-section-title">GAME RULES · MAHJONG</div><div id="mjSettingsSlot"></div></div><div class="mj-settings-group"><div class="settings-section-title">DATA · MAHJONG</div><button id="mjNewGame" class="gn-sub-button" type="button">＋ New Mahjong Game</button><button id="mjClearGame" class="gn-sub-button mj-danger" type="button">🗑 Clear Mahjong Game</button><p class="mj-muted">Only Mahjong session data is deleted. Tongits remains saved.</p></div></div></div>
 <div id="mjActionDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong action"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong id="mjActionTitle">Mahjong</strong><button type="button" id="mjCloseAction" class="mj-dialog-close" aria-label="Close">✕</button></div><div id="mjActionSlot"></div></div></div>
 <div id="mjSettlementDialog" class="mj-dialog hidden"><div class="mj-dialog-card"><h2>💰 Final Settlement</h2><p class="mj-muted">Who pays whom if you settle now. History shows every transaction; settlement combines them into the fewest net payments.</p><div id="mjSettlementList" class="mj-history"></div><button id="mjCloseSettlement" class="primary-button mj-wide">Close</button></div></div>
 
@@ -1510,9 +1515,12 @@
 <script src="js/shared/sounds.js"></script>
 <script src="js/shared/animations.js"></script>
 <script src="js/shared/fun.js"></script>
+<script src="js/shared/avatar-ui.js"></script>
 <script src="js/ui/tongits-ui.js"></script>
 <script src="js/ui/tongits-app.js"></script>
 <script src="js/ui/mahjong-ui.js"></script>
+<script src="js/ui/mahjong-app.js"></script>
+<script src="js/shared/settings-ui.js"></script>
 
 </body>
 </html>

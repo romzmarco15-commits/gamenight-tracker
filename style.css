@@ -2650,3 +2650,102 @@ body[data-theme="light"] .gn-game-tile,body[data-theme="light"] .mj-panel,body[d
 .mj-history-transfer strong{white-space:nowrap}
 .mj-history-transfer small{opacity:.65}
 @media(max-width:480px){#mjActionSlot .mj-history{max-height:62dvh}}
+
+
+/* Unified settings sheet — shared live controls in Tongits and Mahjong */
+.mj-legacy-settings{display:none!important}
+#mjSettingsDialog{align-items:flex-end;padding:0;overflow:hidden}
+#mjSettingsDialog>.mj-dialog-card{
+ width:min(100%,620px);max-width:620px;max-height:min(90dvh,900px);
+ margin:0 auto;padding:22px 20px max(22px,env(safe-area-inset-bottom));
+ border-radius:26px 26px 0 0;border:1px solid var(--border);border-bottom:0;
+ background:var(--surface);overflow-y:auto;overscroll-behavior:contain;
+ -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+ scrollbar-color:rgba(135,135,145,.38) transparent;
+}
+#mjSettingsDialog>.mj-dialog-card::-webkit-scrollbar,
+#settingsOverlay>.modal::-webkit-scrollbar{width:5px}
+#mjSettingsDialog>.mj-dialog-card::-webkit-scrollbar-track,
+#settingsOverlay>.modal::-webkit-scrollbar-track{background:transparent}
+#mjSettingsDialog>.mj-dialog-card::-webkit-scrollbar-thumb,
+#settingsOverlay>.modal::-webkit-scrollbar-thumb{background:rgba(135,135,145,.38);border-radius:10px}
+#settingsOverlay>.modal{scrollbar-width:thin;scrollbar-color:rgba(135,135,145,.38) transparent;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#mjSettingsDialog .mj-dialog-head{position:sticky;top:-22px;z-index:3;background:var(--surface);padding:8px 0 14px;margin-bottom:4px;border-bottom:1px solid var(--border)}
+#mjSettingsDialog .mj-dialog-close{width:34px;height:34px;flex-shrink:0;border-radius:50%;background:var(--surface-2);color:var(--text)}
+.mj-shared-section{padding:16px 0;border-bottom:1px solid var(--border)}
+.mj-shared-section .settings-section-title{margin-bottom:13px}
+.mj-shared-section .theme-selector{width:100%}
+.mj-shared-section .fun-settings,.mj-shared-section .sound-settings-grid{width:100%}
+#mjSettingsDialog .mj-settings-group{padding:18px 0}
+#mjSettingsDialog .mj-settings-group #mjSettings{margin:0}
+@media(max-width:600px){#mjSettingsDialog>.mj-dialog-card{max-height:92dvh}#mjSettingsDialog .mj-dialog-head{top:-22px}}
+
+/* Unified home navigation and Mahjong avatar editor */
+.mj-header{max-width:720px;width:100%;justify-content:space-between;gap:10px}
+.mj-header h1{flex:1;min-width:0}
+.mj-header .gn-home-link{order:1;white-space:nowrap}
+.mj-header #mjRound{order:2;white-space:nowrap}
+.mj-header .mj-header-tools{order:3}
+.mj-avatar-wrap{position:relative;width:62px;height:62px;margin:auto}
+.mj-avatar-wrap .mj-face{width:58px;height:58px;display:grid;place-items:center;padding:0;overflow:hidden;font-size:32px;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:50%;color:var(--text)}
+.mj-avatar-photo{width:100%;height:100%;object-fit:cover;display:block}
+.mj-avatar-fun{position:absolute;right:-6px;bottom:-4px;border:1px solid var(--border);border-radius:50%;background:var(--surface);color:var(--text);width:27px;height:27px;font-size:14px;display:grid;place-items:center;padding:0;cursor:pointer}
+.mj-avatar-emojis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:18px 0}
+.mj-avatar-emoji{border:1px solid var(--border);border-radius:14px;background:var(--surface-2);color:var(--text);min-height:54px;font-size:29px;cursor:pointer}
+.mj-upload-photo{display:block;text-align:center;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:15px;margin:12px 0;font-weight:700;cursor:pointer}
+#mjAvatarDialog .mj-dialog-card{max-height:min(88vh,720px);overflow-y:auto}
+@media(max-width:420px){.mj-header h1{font-size:16px}.mj-header #mjRound{font-size:11px}.mj-header .gn-home-link{padding:8px}.mj-avatar-wrap{width:57px;height:57px}.mj-avatar-wrap .mj-face{width:54px;height:54px}}
+
+/* Game Night shared design primitives — consistent between both games */
+:root{--gn-radius:14px;--gn-control-height:44px;--gn-focus:#579aff}
+.gn-avatar-button,.gn-avatar-display{display:grid;place-items:center;overflow:hidden;border-radius:50%;-webkit-tap-highlight-color:transparent}
+.gn-avatar-image,.gn-avatar-display img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.mj-setup-player{min-width:0;margin:0}.mj-setup-player .setup-avatar-button{cursor:pointer}
+.mj-setup-player .mj-field{width:100%;text-align:left}
+.mj-player .gn-avatar-display{width:58px;height:58px;font-size:32px;background:var(--surface-2);border:1px solid var(--border);color:var(--text)}
+.gn-emoji-option{min-height:52px;min-width:52px}
+.mj-avatar-emojis .gn-emoji-option{border-radius:14px}
+/* Shared iOS-style focus, interaction and checkbox treatment */
+.gn-sub-button,.gn-home-link,.mj-remove,.mj-player-win,.mj-dialog-close,.mj-soundboard-grid button,.mj-setup-player button{transition:transform .14s ease,opacity .14s ease,background-color .2s ease;-webkit-tap-highlight-color:transparent}
+.gn-sub-button:active,.gn-home-link:active,.mj-remove:active,.mj-player-win:active,.mj-dialog-close:active,.mj-soundboard-grid button:active,.mj-setup-player button:active{transform:scale(.97)}
+.mj-screen button:focus-visible,.mj-dialog button:focus-visible,.mj-screen input:focus-visible,.mj-dialog input:focus-visible{outline:3px solid var(--gn-focus);outline-offset:2px}
+.mj-switch .mj-track{pointer-events:none}
+@media(prefers-reduced-motion:reduce){.gn-sub-button,.gn-home-link,.mj-remove,.mj-player-win,.mj-dialog-close{transition:none!important}}
+
+/* Shared player-setup visual language: Tongits follows Mahjong's players panel. */
+#setupScreen .gn-tongits-players-panel{padding:28px;border-radius:32px;max-width:none}
+#setupScreen .gn-tongits-players-panel>.player-count-control{margin:16px auto 8px}
+#setupScreen .gn-tongits-players-panel>.player-count-note{margin:0 0 20px;color:var(--text-secondary,#aab4c4)}
+#setupScreen #setupPlayers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px}
+#setupScreen #setupPlayers>.setup-card{margin:0;min-width:0;border-radius:28px;padding:26px}
+#setupScreen #setupPlayers .setup-player-header{display:flex;align-items:center;gap:22px;margin-bottom:22px}
+#setupScreen #setupPlayers .setup-avatar-button{width:136px;height:136px}
+#setupScreen #setupPlayers .field input{width:100%;box-sizing:border-box}
+#mjNewGame{display:block;width:100%;margin-bottom:12px}
+@media(max-width:650px){#setupScreen .gn-tongits-players-panel{padding:18px;border-radius:22px}#setupScreen #setupPlayers{grid-template-columns:1fr;gap:12px}#setupScreen #setupPlayers>.setup-card{padding:18px;border-radius:20px}#setupScreen #setupPlayers .setup-avatar-button{width:96px;height:96px}}
+
+/* Tongits setup: same player-card geometry as Mahjong; avoid inherited avatar overlap. */
+#setupScreen .gn-tongits-players-panel{padding:28px;border-radius:30px}
+#setupScreen #setupPlayers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;margin-top:24px}
+#setupScreen #setupPlayers>.setup-card{margin:0;padding:24px 22px;min-width:0;box-sizing:border-box;border-radius:26px}
+#setupScreen #setupPlayers .setup-player-header{display:flex;align-items:center;gap:20px;min-width:0;margin-bottom:22px}
+#setupScreen #setupPlayers .setup-player-header h3{flex:1;min-width:0;margin:0;font-size:22px;line-height:1.2;overflow-wrap:anywhere}
+#setupScreen #setupPlayers .setup-avatar-wrapper{position:relative;width:112px;height:112px;flex:0 0 112px}
+#setupScreen #setupPlayers .setup-avatar-button{display:flex;align-items:center;justify-content:center;width:112px;height:112px;box-sizing:border-box;font-size:56px;line-height:1;border-radius:50%;overflow:hidden}
+#setupScreen #setupPlayers .setup-avatar-button img{width:100%;height:100%;object-fit:cover}
+#setupScreen #setupPlayers .avatar-edit-badge{position:absolute;right:-2px;bottom:0;z-index:1}
+#setupScreen #setupPlayers .field{min-width:0;margin:0}
+#setupScreen #setupPlayers .field label{display:block;margin-bottom:8px}
+#setupScreen #setupPlayers .field input{display:block;max-width:100%;width:100%;min-width:0;box-sizing:border-box}
+.gn-settings-disclosure{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--surface)}
+.gn-settings-disclosure summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:750;display:flex;align-items:center;gap:8px}
+.gn-settings-disclosure summary::-webkit-details-marker{display:none}
+.gn-settings-disclosure summary span{margin-left:auto;font-weight:400;font-size:12px;color:var(--text-muted);text-align:right}
+.gn-settings-disclosure summary:after{content:'⌄';margin-left:8px;color:var(--text-muted)}
+.gn-settings-disclosure[open] summary:after{content:'⌃'}
+.gn-settings-disclosure-content{padding:4px 16px 16px;border-top:1px solid var(--border)}
+@media(max-width:650px){#setupScreen #setupPlayers{grid-template-columns:1fr;gap:12px}#setupScreen #setupPlayers>.setup-card{padding:18px}#setupScreen #setupPlayers .setup-avatar-wrapper{width:88px;height:88px;flex-basis:88px}#setupScreen #setupPlayers .setup-avatar-button{width:88px;height:88px;font-size:46px}#setupScreen #setupPlayers .setup-player-header{gap:16px}#setupScreen #setupPlayers .setup-player-header h3{font-size:20px}}
+
+/* Disabled upcoming games: visible but not interactive */
+.gn-game-tile.gn-coming-soon{opacity:.46;filter:grayscale(1);cursor:default;user-select:none}
+.gn-game-tile.gn-coming-soon .gn-unavailable{display:block;margin-top:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--border, #8885);background:var(--surface-2,#8882);text-align:center;font-weight:650;color:var(--text-soft,#999)}
