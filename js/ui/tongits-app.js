@@ -1273,7 +1273,8 @@ function openPotPrediction() {
     openOverlay("predictionOverlay");
 }
 
-document.getElementById("potArea").addEventListener("click", function () {
+document.getElementById("potArea").addEventListener("click", function (event) {
+    if (event.target.closest(".gn-pot-arrow, .gn-pot-dots, #potDisplay")) return;
     if (!game || game.finished) return;
     const now = Date.now();
     potEggTaps = potEggTaps.filter(t => now - t <= 4500);
@@ -1282,6 +1283,13 @@ document.getElementById("potArea").addEventListener("click", function () {
         potEggTaps = [];
         openPotPrediction();
     }
+});
+
+document.getElementById("potDisplay").addEventListener("click", function(event){
+    event.stopPropagation();
+    if(!game)return;
+    const names=game.players.map(p=>p.name||"Player");
+    showMessage("Current Jackpot",`Unclaimed pot: ${money(game.pot)}\n\n${names.length} players are contributing to this shared pot. Pot contributions are included in player balances until the pot is awarded.\n\nSwipe the artwork to change its design; this never changes the amount.`);
 });
 
 document.getElementById("closePredictionButton").addEventListener("click", () => {

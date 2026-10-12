@@ -634,9 +634,12 @@ function renderPot() {
     if (visual) {
         const previousPot = Number(visual.dataset.pot || 0);
         const currentPot = Number(game.pot || 0);
+        visual.dataset.design = (window.GameNightPotDesign && window.GameNightPotDesign.get()) || "pot";
         visual.style.setProperty("--jackpot-level", `${level}%`);
-        visual.dataset.stage = level >= 90 ? "overflow" : level >= 65 ? "full" : level >= 35 ? "growing" : "low";
+        visual.dataset.stage = currentPot <= 0 ? "empty" : level >= 90 ? "overflow" : level >= 65 ? "full" : level >= 35 ? "growing" : "low";
         visual.dataset.pot = String(currentPot);
+        const jackpotArtwork = visual.querySelector(".gn-art-shell");
+        if (jackpotArtwork) jackpotArtwork.src = "assets/jackpots/" + visual.dataset.design + "-" + visual.dataset.stage + ".svg";
         if (visual.dataset.ready === "yes" && currentPot > previousPot && !game.finished) {
             visual.classList.remove("jackpot-added");
             void visual.offsetWidth;
@@ -755,10 +758,14 @@ function playerDebtHtml(player) {
     const currentPot = roundMoney(breakdown.currentPot);
     const summaryRows = positions.map(item => `<div class="pending-row"><span class="pending-label">${item.amount < 0 ? 'Owes' : 'Owed by'} ${escapeHtml(game.players[item.i].name)}</span><span class="pending-amount">${item.amount < 0 ? '−' : '+'}${money(Math.abs(item.amount))}</span></div>`).join('');
     const netWithPlayers = roundMoney(positions.reduce((sum,item) => sum + item.amount,0));
-    const summary = `<div class="player-pending"><div class="pending-title">NET POSITION</div>
-        ${summaryRows || '<div class="pending-row"><span class="pending-label">No player balances yet</span></div>'}
-        ${!game.finished ? `<div class="pending-row"><span class="pending-label">Current pot contribution</span><span class="pending-amount">−${money(currentPot)}</span></div>` : ''}
-        <div class="pending-row"><strong>Net score</strong><strong>${money(roundMoney(netWithPlayers-currentPot))}</strong></div>
+    const overallNet = roundMoney(netWithPlayers - currentPot);
+    const signed = value => `${value > 0 ? '+' : value < 0 ? '−' : ''}${money(Math.abs(value))}`;
+    const summary = `<div class="player-pending gn-net-summary">
+        <div class="pending-title">OVERALL NET POSITION</div>
+        <div class="gn-net-breakdown-row"><span>Vs. players (net)</span><strong class="${netWithPlayers > 0 ? 'gn-positive' : netWithPlayers < 0 ? 'gn-negative' : ''}">${signed(netWithPlayers)}</strong></div>
+        ${!game.finished ? `<div class="gn-net-breakdown-row"><span>Current pot contribution</span><strong>−${money(currentPot)}</strong></div>` : ''}
+        <div class="gn-net-breakdown-total"><span>Overall net</span><strong class="${overallNet > 0 ? 'gn-positive' : overallNet < 0 ? 'gn-negative' : ''}">${signed(overallNet)}</strong></div>
+        ${summaryRows ? `<details class="gn-player-details"><summary>Player-by-player details</summary>${summaryRows}</details>` : ''}
     </div>`;
     const details = positions.map(item => {
         const gameAmount = roundMoney(breakdown.gameBetween[item.i]);

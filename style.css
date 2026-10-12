@@ -2749,3 +2749,128 @@ body[data-theme="light"] .gn-game-tile,body[data-theme="light"] .mj-panel,body[d
 /* Disabled upcoming games: visible but not interactive */
 .gn-game-tile.gn-coming-soon{opacity:.46;filter:grayscale(1);cursor:default;user-select:none}
 .gn-game-tile.gn-coming-soon .gn-unavailable{display:block;margin-top:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--border, #8885);background:var(--surface-2,#8882);text-align:center;font-weight:650;color:var(--text-soft,#999)}
+
+/* Consistent, compact per-player net breakdown */
+.gn-net-summary{padding:12px 13px;margin-top:4px}
+.gn-net-breakdown-row,.gn-net-breakdown-total{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 0;font-size:12px;color:var(--text-soft)}
+.gn-net-breakdown-row strong,.gn-net-breakdown-total strong{white-space:nowrap;color:var(--text)}
+.gn-net-breakdown-total{border-top:1px solid var(--border);margin-top:6px;padding-top:9px;font-weight:800;color:var(--text)}
+.gn-net-breakdown-total strong{font-size:15px}
+.gn-net-summary .gn-positive{color:var(--success,#22a65a)}
+.gn-net-summary .gn-negative{color:var(--danger,#c73434)}
+.gn-player-details{border-top:1px solid var(--border);margin-top:7px;padding-top:6px}
+.gn-player-details summary{font-size:11px;color:var(--text-muted);cursor:pointer;list-style-position:inside}
+.gn-player-details .pending-row{padding:5px 0 2px 10px}
+
+/* Selectable jackpot skins. All skins share the same pot level and transfer logic. */
+.gn-pot-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+.gn-pot-choice{display:flex;align-items:center;gap:9px;padding:13px 10px;border:2px solid var(--border-color,rgba(128,128,128,.25));border-radius:15px;background:var(--card-bg,rgba(128,128,128,.08));color:inherit;font:inherit;cursor:pointer;text-align:left}
+.gn-pot-choice-icon{font-size:26px}.gn-pot-choice.is-selected{border-color:#e6a744;box-shadow:0 0 0 2px rgba(230,167,68,.13)}
+.gn-pot-choice:focus-visible{outline:3px solid #e6a744;outline-offset:2px}
+#jackpotVisual[data-design="chest"] .jackpot-body{height:78px;bottom:4px;border-radius:9px 9px 18px 18px;border:4px solid #6e3b20;background:repeating-linear-gradient(0deg,#915027 0 21px,#5c301e 22px 26px);box-shadow:inset 0 0 0 4px #c99140,0 9px 16px #0004}
+#jackpotVisual[data-design="chest"] .jackpot-body:before{content:"";position:absolute;left:-4px;top:-31px;width:132px;height:30px;border:4px solid #74401e;border-radius:65px 65px 5px 5px;background:linear-gradient(#dba552,#85451e);transform-origin:bottom center;transform:rotate(calc(var(--jackpot-open, 0) * -1deg));transition:transform .5s}
+#jackpotVisual[data-design="chest"][data-stage="full"]{--jackpot-open:17}#jackpotVisual[data-design="chest"][data-stage="overflow"]{--jackpot-open:35}
+#jackpotVisual[data-design="chest"] .jackpot-body:after{content:"🔒";position:absolute;top:24px;left:46px;width:35px;height:36px;border:0;font-size:25px}
+#jackpotVisual[data-design="chest"] .jackpot-rim-back,#jackpotVisual[data-design="chest"] .jackpot-rim-front{opacity:0}
+#jackpotVisual[data-design="bag"] .jackpot-body{bottom:3px;left:36px;width:118px;height:112px;border-radius:34% 34% 45% 45% / 22% 22% 48% 48%;border:3px solid #966323;background:radial-gradient(circle at 30% 28%,#ffe3a2,#c99b48 48%,#93601f);box-shadow:inset -13px -7px 17px #56350d77,0 10px 18px #0003}
+#jackpotVisual[data-design="bag"] .jackpot-body:before{content:"";position:absolute;left:33px;top:-13px;width:43px;height:22px;border:0;border-radius:10px;background:#75511c;transform:rotate(-4deg)}
+#jackpotVisual[data-design="bag"] .jackpot-body:after{content:"$";position:absolute;left:37px;top:28px;border:0;font-size:40px;font-weight:900;color:#67451a}
+#jackpotVisual[data-design="bag"] .jackpot-rim-back,#jackpotVisual[data-design="bag"] .jackpot-rim-front{opacity:0}
+#jackpotVisual[data-design="bag"][data-stage="full"] .jackpot-body{transform:scale(1.07);transition:transform .4s}
+#jackpotVisual[data-design="bag"][data-stage="overflow"] .jackpot-body{transform:scale(1.14);transition:transform .4s}
+#jackpotVisual[data-design="vault"] .jackpot-body{bottom:2px;left:26px;width:138px;height:108px;border:5px solid #6a7480;border-radius:16px;background:linear-gradient(130deg,#e5eaf0,#8998a6 35%,#404e61 75%,#a2acb8);box-shadow:inset 0 0 0 5px #536476,0 12px 19px #0004}
+#jackpotVisual[data-design="vault"] .jackpot-body:before{content:"";position:absolute;left:27px;top:14px;width:65px;height:65px;border:6px double #263545;border-radius:50%;background:radial-gradient(circle,#cbd5dc 0 12%,#5a697b 13% 29%,#d5dde4 30% 37%,#647589 38%);box-shadow:0 0 0 4px #a4b1bd}
+#jackpotVisual[data-design="vault"] .jackpot-body:after{content:"";position:absolute;top:17px;left:57px;width:6px;height:63px;border:0;border-radius:4px;background:#25384b;transform:rotate(40deg)}
+#jackpotVisual[data-design="vault"] .jackpot-rim-back,#jackpotVisual[data-design="vault"] .jackpot-rim-front{opacity:0}
+#jackpotVisual[data-design="vault"] .jackpot-money{z-index:5;bottom:85px}
+#jackpotVisual[data-design="vault"][data-stage="overflow"] .jackpot-body{animation:gn-vault-pulse 1.5s ease-in-out infinite}
+@keyframes gn-vault-pulse{50%{filter:drop-shadow(0 0 10px #ffca62)}}
+#jackpotVisual[data-design="chest"] .jackpot-money{bottom:72px}
+#jackpotVisual[data-design="bag"] .jackpot-money{bottom:91px}
+#jackpotVisual[data-design="chest"][data-stage="overflow"] .jackpot-overflow{animation:gn-chest-sparkle 1.3s ease-in-out infinite alternate}
+#jackpotVisual[data-design="bag"][data-stage="overflow"] .jackpot-overflow{animation:gn-bag-shower 1s ease-in-out infinite alternate}
+#jackpotVisual[data-design="vault"][data-stage="overflow"] .jackpot-overflow{animation:gn-vault-glow 1.6s ease-in-out infinite alternate}
+@keyframes gn-chest-sparkle{to{filter:brightness(1.5);transform:translateY(-7px)}}
+@keyframes gn-bag-shower{to{transform:translateY(8px) rotate(4deg)}}
+@keyframes gn-vault-glow{to{filter:drop-shadow(0 0 13px #ffd65d);transform:scale(1.09)}}
+@media(prefers-reduced-motion:reduce){#jackpotVisual[data-design] .jackpot-overflow,#jackpotVisual[data-design] .jackpot-body{animation:none!important}}
+
+/* Interactive pot gallery, with shared swipe/arrow/dot navigation. */
+.gn-pot-carousel{display:flex;align-items:center;justify-content:center;gap:4px;max-width:320px;margin:0 auto}
+.gn-pot-swipe{touch-action:pan-y;cursor:pointer;user-select:none;-webkit-user-select:none;border-radius:22px;flex:0 0 190px;outline-offset:2px}
+.gn-pot-swipe:focus-visible,.gn-pot-arrow:focus-visible,.gn-pot-dot:focus-visible{outline:2px solid #e5a83d;outline-offset:3px}
+.gn-pot-arrow{border:0;background:rgba(127,127,127,.1);color:inherit;width:38px;height:42px;border-radius:14px;font-size:32px;line-height:1;cursor:pointer;flex-shrink:0}
+.gn-pot-arrow:active{transform:scale(.92)}
+.gn-pot-picker-caption{display:flex;align-items:center;justify-content:center;gap:10px;font-size:.88rem;font-weight:700;margin-top:-1px}
+.gn-pot-hint,.gn-pot-tap-hint{font-size:.73rem;font-weight:400;opacity:.55}
+.gn-pot-tap-hint{text-align:center;margin:3px auto 0}
+#potDisplay{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:rgba(127,127,127,.4);text-underline-offset:5px}
+.gn-pot-dots{display:flex;justify-content:center;gap:8px;margin:9px auto 10px}
+.gn-pot-dot{border:0;width:8px;height:8px;border-radius:20px;background:rgba(127,127,127,.35);padding:0;cursor:pointer;transition:width .2s,background .2s}
+.gn-pot-dot.active{width:22px;background:#dfa33c}
+#jackpotVisual[data-stage="empty"] .jackpot-money,#jackpotVisual[data-stage="empty"] .jackpot-overflow{opacity:0!important}
+#jackpotVisual[data-stage="low"] .jackpot-money{opacity:.62}
+#jackpotVisual[data-design="chest"][data-stage="empty"] .jackpot-body:before{transform:rotate(0deg)}
+#jackpotVisual[data-design="chest"][data-stage="low"]{--jackpot-open:5}
+#jackpotVisual[data-design="chest"][data-stage="growing"]{--jackpot-open:13}
+#jackpotVisual[data-design="chest"][data-stage="full"]{--jackpot-open:24}
+#jackpotVisual[data-design="chest"][data-stage="overflow"]{--jackpot-open:42}
+#jackpotVisual[data-design="bag"][data-stage="empty"] .jackpot-body{transform:scale(.72,.5);transform-origin:center bottom}
+#jackpotVisual[data-design="bag"][data-stage="low"] .jackpot-body{transform:scale(.84,.8)}
+#jackpotVisual[data-design="bag"][data-stage="growing"] .jackpot-body{transform:scale(.95,.94)}
+#jackpotVisual[data-design="vault"][data-stage="empty"] .jackpot-money{opacity:0}
+#jackpotVisual[data-design="vault"] .jackpot-body:before{transition:transform .45s;transform-origin:35px 35px}
+#jackpotVisual[data-design="vault"][data-stage="growing"] .jackpot-body:before{transform:rotate(-18deg)}
+#jackpotVisual[data-design="vault"][data-stage="full"] .jackpot-body:before{transform:rotate(-36deg)}
+#jackpotVisual[data-design="vault"][data-stage="overflow"] .jackpot-body:before{transform:rotate(-55deg)}
+#jackpotVisual.gn-pot-jiggle{animation:gn-pot-jiggle .55s ease-in-out}
+#jackpotVisual.gn-pot-shower .jackpot-overflow{opacity:1;animation:gn-pot-shower .85s ease-out}
+#jackpotVisual[data-design="chest"].gn-pot-shower .jackpot-overflow{animation:gn-chest-sparkle .85s ease-out}
+#jackpotVisual[data-design="bag"].gn-pot-shower .jackpot-overflow{animation:gn-bag-shower .85s ease-out}
+#jackpotVisual[data-design="vault"].gn-pot-shower .jackpot-overflow{animation:gn-vault-glow .85s ease-out}
+@keyframes gn-pot-jiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}45%{transform:rotate(4deg)}70%{transform:rotate(-2deg)}}
+@keyframes gn-pot-shower{0%{transform:translateY(12px) scale(.8);opacity:0}40%{transform:translateY(-12px) scale(1.12);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+@media(max-width:480px){.gn-pot-carousel{gap:0}.gn-pot-arrow{width:34px}.gn-pot-swipe{flex-basis:174px}#jackpotVisual.pot-visual{margin:3px auto;scale:.9}}
+@media(prefers-reduced-motion:reduce){#jackpotVisual.gn-pot-jiggle,#jackpotVisual.gn-pot-shower .jackpot-overflow{animation:none!important}}
+
+/* Distinct layered SVG jackpot artwork, replacing the shared emoji pile. */
+#jackpotVisual .jackpot-body,#jackpotVisual .jackpot-rim-back,#jackpotVisual .jackpot-rim-front,
+#jackpotVisual .jackpot-money,#jackpotVisual .jackpot-overflow{display:none!important}
+#jackpotVisual .gn-artwork{position:absolute;inset:0;z-index:5;pointer-events:none;isolation:isolate}
+#jackpotVisual .gn-art-shell,#jackpotVisual .gn-art-contents{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:transform .55s ease,opacity .55s ease,clip-path .55s ease}
+#jackpotVisual .gn-art-shell{z-index:2;filter:drop-shadow(0 6px 4px #0003)}
+#jackpotVisual .gn-art-contents{z-index:3;opacity:0;transform:translateY(17px) scale(.68);clip-path:inset(70% 0 0 0)}
+#jackpotVisual[data-stage="low"] .gn-art-contents{opacity:.8;transform:translateY(9px) scale(.76);clip-path:inset(51% 0 0 0)}
+#jackpotVisual[data-stage="growing"] .gn-art-contents{opacity:1;transform:translateY(5px) scale(.88);clip-path:inset(29% 0 0 0)}
+#jackpotVisual[data-stage="full"] .gn-art-contents{opacity:1;transform:translateY(0) scale(1);clip-path:inset(10% 0 0 0)}
+#jackpotVisual[data-stage="overflow"] .gn-art-contents{opacity:1;transform:translateY(-7px) scale(1.12);clip-path:inset(0 0 0 0)}
+#jackpotVisual[data-design="chest"] .gn-art-shell{transform-origin:50% 76%}
+#jackpotVisual[data-design="chest"][data-stage="growing"] .gn-art-shell{transform:rotate(-2deg)}
+#jackpotVisual[data-design="chest"][data-stage="overflow"] .gn-art-shell{transform:rotate(-5deg)}
+#jackpotVisual[data-design="bag"][data-stage="empty"] .gn-art-shell{transform:scale(.77,.67);transform-origin:center bottom}
+#jackpotVisual[data-design="bag"][data-stage="low"] .gn-art-shell{transform:scale(.88,.84);transform-origin:center bottom}
+#jackpotVisual[data-design="bag"][data-stage="full"] .gn-art-shell{transform:scale(1.04)}
+#jackpotVisual[data-design="bag"][data-stage="overflow"] .gn-art-shell{transform:scale(1.1);animation:gn-bag-breathe 1.2s ease-in-out infinite alternate}
+#jackpotVisual[data-design="vault"][data-stage="growing"] .gn-art-shell{transform:rotate(-1deg)}
+#jackpotVisual[data-design="vault"][data-stage="overflow"] .gn-art-shell{filter:drop-shadow(0 0 11px #ffce6c);animation:gn-vault-spark 1.8s ease-in-out infinite alternate}
+.gn-art-particles{position:absolute;inset:0;z-index:4;opacity:0;transition:opacity .3s}
+#jackpotVisual[data-stage="overflow"] .gn-art-particles,#jackpotVisual.gn-pot-shower .gn-art-particles{opacity:1}
+.gn-art-particles i{position:absolute;left:var(--x);top:var(--y);width:18px;height:12px;display:block;transform:rotate(var(--r));animation:gn-art-float 1.9s ease-in-out infinite alternate;animation-delay:var(--delay)}
+.gn-art-particles i:nth-child(1){--x:10%;--y:27%;--r:-27deg;--delay:0s}
+.gn-art-particles i:nth-child(2){--x:72%;--y:12%;--r:21deg;--delay:.3s}
+.gn-art-particles i:nth-child(3){--x:85%;--y:45%;--r:35deg;--delay:.7s}
+.gn-art-particles i:nth-child(4){--x:26%;--y:7%;--r:-12deg;--delay:1s}
+.gn-art-particles i:nth-child(5){--x:52%;--y:3%;--r:11deg;--delay:1.3s}
+#jackpotVisual[data-design="pot"] .gn-art-particles i{border-radius:50%;border:3px solid #b87522;background:linear-gradient(125deg,#fff6bd,#e8aa24)}
+#jackpotVisual[data-design="chest"] .gn-art-particles i{width:13px;height:17px;clip-path:polygon(50% 0,100% 45%,50% 100%,0 45%);background:linear-gradient(130deg,#e6faff,#36c7e6 55%,#9255e6)}
+#jackpotVisual[data-design="bag"] .gn-art-particles i{width:27px;height:14px;border:2px solid #35784a;border-radius:2px;background:repeating-linear-gradient(90deg,#8be0a1 0 7px,#c8f5b0 7px 11px)}
+#jackpotVisual[data-design="vault"] .gn-art-particles i{width:22px;height:13px;border:2px solid #9e6b25;clip-path:polygon(0 25%,25% 0,100% 0,75% 100%,0 100%);background:linear-gradient(135deg,#fff6b2,#e3a72a)}
+@keyframes gn-art-float{to{transform:translateY(-12px) rotate(calc(var(--r) + 17deg))}}
+@keyframes gn-bag-breathe{to{transform:scale(1.15,1.09) rotate(2deg)}}
+@keyframes gn-vault-spark{to{filter:drop-shadow(0 0 19px #ffc04e)}}
+@media(prefers-reduced-motion:reduce){#jackpotVisual .gn-art-particles i,#jackpotVisual .gn-art-shell{animation:none!important}}
+
+/* Corrected jackpot: each growth stage is one self-contained opaque illustration. */
+#jackpotVisual .gn-art-contents{display:none!important}
+#jackpotVisual .gn-art-shell{z-index:2;opacity:1!important;transform:none!important;clip-path:none!important;animation:none!important;filter:drop-shadow(0 6px 4px #0003)}
+#jackpotVisual .gn-art-particles{z-index:3}
