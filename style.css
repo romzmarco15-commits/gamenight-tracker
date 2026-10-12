@@ -2874,3 +2874,8 @@ body[data-theme="light"] .gn-game-tile,body[data-theme="light"] .mj-panel,body[d
 #jackpotVisual .gn-art-contents{display:none!important}
 #jackpotVisual .gn-art-shell{z-index:2;opacity:1!important;transform:none!important;clip-path:none!important;animation:none!important;filter:drop-shadow(0 6px 4px #0003)}
 #jackpotVisual .gn-art-particles{z-index:3}
+
+/* Quiet jackpot: swipe-only design switching; no visible picker or carousel controls. */
+.gn-pot-carousel{max-width:220px;gap:0;margin:8px auto 4px}
+.gn-pot-swipe{flex:0 1 200px;touch-action:pan-y;cursor:default}
+@media(max-width:480px){.gn-pot-swipe{flex-basis:190px}}

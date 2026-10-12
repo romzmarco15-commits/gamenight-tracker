@@ -13,18 +13,13 @@ function apply(){
   const shell=visual.querySelector(".gn-art-shell");
   if(shell)shell.src="assets/jackpots/"+design+"-"+(visual.dataset.stage||"empty")+".svg";
  }
- const caption=document.getElementById("gnPotDesignName");if(caption)caption.textContent=designs[index].name;
- document.querySelectorAll("[data-pot-design]").forEach(b=>{const selected=b.dataset.potDesign===designs[index].id;b.classList.toggle("is-selected",selected);b.setAttribute("aria-pressed",String(selected));});
- const dots=document.getElementById("gnPotDots");if(dots){dots.replaceChildren();designs.forEach((d,i)=>{const b=document.createElement("button");b.type="button";b.className="gn-pot-dot"+(i===index?" active":"");b.setAttribute("aria-label",d.name);b.setAttribute("aria-pressed",String(i===index));b.addEventListener("click",()=>set(d.id));dots.appendChild(b);});}
 }
 function set(id){const i=designs.findIndex(d=>d.id===id);if(i<0)return;index=i;try{localStorage.setItem(KEY,id)}catch(_){}apply();}
 function cycle(delta){set(designs[(index+delta+designs.length)%designs.length].id);}
 function animate(type){const v=document.getElementById("jackpotVisual");if(!v)return;v.classList.remove("gn-pot-jiggle","gn-pot-shower");void v.offsetWidth;v.classList.add(type==="shower"?"gn-pot-shower":"gn-pot-jiggle");clearTimeout(v._gnInteractTimer);v._gnInteractTimer=setTimeout(()=>v.classList.remove("gn-pot-jiggle","gn-pot-shower"),900);}
 function init(){
  apply();
- const prev=document.getElementById("gnPotPrev"),next=document.getElementById("gnPotNext"),swipe=document.getElementById("gnPotSwipe");
- if(prev)prev.addEventListener("click",e=>{e.stopPropagation();cycle(-1)});
- if(next)next.addEventListener("click",e=>{e.stopPropagation();cycle(1)});
+ const swipe=document.getElementById("gnPotSwipe");
  if(!swipe)return;
  let start=null,dragged=false,lastTap=0;
  swipe.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;start={x:e.clientX,y:e.clientY};dragged=false;});
@@ -32,7 +27,6 @@ function init(){
  swipe.addEventListener("pointercancel",()=>{start=null});
  swipe.addEventListener("click",()=>{if(dragged||swipe.dataset.swiped==="yes"){dragged=false;return;}const now=Date.now();animate(now-lastTap<360?"shower":"jiggle");lastTap=now;});
  swipe.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();cycle(e.key==="ArrowLeft"?-1:1);}else if(e.key==="Enter"||e.key===" "){e.preventDefault();animate("jiggle");}});
- document.querySelectorAll("[data-pot-design]").forEach(b=>b.addEventListener("click",()=>set(b.dataset.potDesign)));
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 window.GameNightPotDesign={get:()=>designs[index].id,set,apply,cycle,animate};
