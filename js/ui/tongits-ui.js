@@ -865,6 +865,8 @@ function renderFinishedBanner() {
 ========================================= */
 
 const expandedPlayerDetails = new Set();
+// The nested Player-by-player <details> has its own independent state.
+const expandedOpponentDetails = new Set();
 
 function renderGame() {
     if (!game) return;
@@ -1002,6 +1004,16 @@ function renderGame() {
             `;
 
             container.appendChild(card);
+            const opponentDetails = card.querySelector('.gn-player-details');
+            if (opponentDetails) {
+                opponentDetails.open = expandedOpponentDetails.has(index);
+                opponentDetails.addEventListener('toggle', () => {
+                    // Ignore stale toggle events dispatched after a card was replaced.
+                    if (!opponentDetails.isConnected) return;
+                    if (opponentDetails.open) expandedOpponentDetails.add(index);
+                    else expandedOpponentDetails.delete(index);
+                });
+            }
             const ledger = card.querySelector('[data-player-ledger]');
             if (ledger) ledger.hidden = !expandedPlayers.has(index);
             const toggle = card.querySelector('[data-ledger-toggle]');
