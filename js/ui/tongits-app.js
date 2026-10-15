@@ -1287,9 +1287,11 @@ document.getElementById("potArea").addEventListener("click", function (event) {
 
 document.getElementById("potDisplay").addEventListener("click", function(event){
     event.stopPropagation();
-    if(!game)return;
-    const names=game.players.map(p=>p.name||"Player");
-    showMessage("Current Jackpot",`Unclaimed pot: ${money(game.pot)}\n\n${names.length} players are contributing to this shared pot. Pot contributions are included in player balances until the pot is awarded.\n\nSwipe the artwork to change its design; this never changes the amount.`);
+    showPotDetails();
+});
+document.getElementById("closePotDetailsButton").addEventListener("click", () => closeOverlay("potDetailsOverlay"));
+document.getElementById("potDetailsOverlay").addEventListener("click", function(event){
+    if (event.target === this) closeOverlay("potDetailsOverlay");
 });
 
 document.getElementById("closePredictionButton").addEventListener("click", () => {

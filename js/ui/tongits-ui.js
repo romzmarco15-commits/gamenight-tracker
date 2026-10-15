@@ -639,7 +639,7 @@ function renderPot() {
         visual.dataset.stage = currentPot <= 0 ? "empty" : level >= 90 ? "overflow" : level >= 65 ? "full" : level >= 35 ? "growing" : "low";
         visual.dataset.pot = String(currentPot);
         const jackpotArtwork = visual.querySelector(".gn-art-shell");
-        if (jackpotArtwork) jackpotArtwork.src = "assets/jackpots/" + visual.dataset.design + "-" + visual.dataset.stage + ".svg?v=layered1";
+        if (jackpotArtwork) jackpotArtwork.src = "assets/jackpots/" + visual.dataset.design + "-" + visual.dataset.stage + ".png?v=isolated3d3";
         if (visual.dataset.ready === "yes" && currentPot > previousPot && !game.finished) {
             visual.classList.remove("jackpot-added");
             void visual.offsetWidth;
@@ -689,6 +689,41 @@ function renderPot() {
         status;
 }
 
+
+/* Live pot accounting. Read-only: never alters virtual balances. */
+function showPotDetails() {
+    if (!game) return;
+    const current = roundMoney(Number(game.pot) || 0);
+    const contributions = game.players.map((player, index) => ({
+        name: player.name,
+        amount: roundMoney(playerVirtualBreakdown(index).currentPot)
+    }));
+    const total = roundMoney(contributions.reduce((sum, item) => sum + item.amount, 0));
+    const rows = contributions.map(item => `<div class="gn-pot-details-row"><span>${escapeHtml(item.name)}</span><strong>${money(item.amount)}</strong></div>`).join('');
+    const goal = Math.max(1, Number(game.rules?.potWinStreak) || 3);
+    const leader = Number.isInteger(game.lastWinner) ? game.players[game.lastWinner] : null;
+    const streak = leader ? Math.min(goal, Math.max(0, Number(leader.streak) || 0)) : 0;
+    const active = (game.history || []).filter(e => !e.undone && !e.isUndone);
+    const awarded = active.filter(e => e.eventType === 'round' && Number(e.potWon) > 0);
+    const last = awarded.length ? awarded[awarded.length - 1] : null;
+    const awards = awarded.slice().reverse().map(e => `<div class="gn-pot-details-row"><span>${escapeHtml(e.winner || 'Winner')} · Round ${Number(e.round) || '—'}</span><strong>${money(e.potWon)}</strong></div>`).join('');
+    const difference = roundMoney(current - total);
+    document.getElementById('potDetailsContent').innerHTML = `
+        <div class="gn-pot-details-total"><small>CURRENT JACKPOT</small><strong>${money(current)}</strong><span>${current > 0 ? 'Unclaimed pot' : 'No unclaimed pot'}</span></div>
+        <h3>Contributions to this pot</h3>
+        ${rows}
+        <div class="gn-pot-details-row gn-pot-details-sum"><span>Total contributed</span><strong>${money(total)}</strong></div>
+        ${Math.abs(difference) > 0.01 ? '<p class="gn-pot-details-note">Contribution records do not fully match the pot balance. Check game history.</p>' : ''}
+        <h3>🏆 Race to the jackpot</h3>
+        <div class="gn-pot-details-row"><span>${leader ? escapeHtml(leader.name) : 'No consecutive winner yet'}</span><strong>${streak} / ${goal} wins</strong></div>
+        <div class="gn-pot-details-track"><div style="width:${100 * streak / goal}%"></div></div>
+        <p class="gn-pot-details-note">${leader ? (streak >= goal ? 'Eligible to claim the pot.' : `${goal - streak} more consecutive ${goal - streak === 1 ? 'win' : 'wins'} to claim the pot.`) : 'The next round winner starts a new streak.'}</p>
+        <h3>Previous jackpot awards</h3>
+        ${last ? `<div class="gn-pot-details-row"><span>Most recent · ${escapeHtml(last.winner || 'Winner')} · Round ${Number(last.round) || '—'}</span><strong>${money(last.potWon)}</strong></div>` : '<p class="gn-pot-details-note">No jackpots awarded yet.</p>'}
+        ${awarded.length > 1 ? `<details class="gn-pot-details-history"><summary>View all ${awarded.length} awards</summary>${awards}</details>` : ''}
+    `;
+    openOverlay('potDetailsOverlay');
+}
 
 /* =========================================
    VIRTUAL SCORE BREAKDOWN

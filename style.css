@@ -3015,3 +3015,33 @@ body[data-theme="light"] .gn-game-tile,body[data-theme="light"] .mj-panel,body[d
 
 /* Layered transparent jackpot assets */
 #jackpotVisual .gn-art-shell{object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 12px 11px #0009)!important}
+
+/* Jackpot ambient effects: match each selected container's contents. */
+#jackpotVisual .gn-art-particles{pointer-events:none}
+#jackpotVisual .gn-art-particles i{display:block!important;box-sizing:border-box!important;clip-path:none!important;border:0!important;border-radius:0!important;width:25px!important;height:25px!important;background:transparent url('assets/jackpots/particle-coin.svg') center/contain no-repeat!important;filter:drop-shadow(0 2px 3px #0007)}
+#jackpotVisual[data-design="chest"] .gn-art-particles i,
+#jackpotVisual[data-design="bag"] .gn-art-particles i,
+#jackpotVisual[data-design="pot"] .gn-art-particles i{background-image:url('assets/jackpots/particle-coin.svg')!important}
+#jackpotVisual[data-design="cash"] .gn-art-particles i{background-image:url('assets/jackpots/particle-cash.svg')!important;width:38px!important;height:27px!important}
+#jackpotVisual[data-design="vault"] .gn-art-particles i{background-image:url('assets/jackpots/particle-bar.svg')!important;width:33px!important;height:25px!important}
+
+/* Jackpot accounting dialog */
+.gn-pot-details-modal{width:min(480px,calc(100vw - 30px));max-height:min(85vh,760px);overflow-y:auto;text-align:left;padding:22px}
+.gn-pot-details-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.gn-pot-details-header h2{margin:0;font-size:1.25rem}
+.gn-pot-details-close{border:1px solid var(--border-color,#5555);border-radius:50%;background:var(--surface-2,#7772);color:inherit;width:36px;height:36px;cursor:pointer}
+.gn-pot-details-total{text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 8px 20px;border-bottom:1px solid #8883}
+.gn-pot-details-total small{letter-spacing:.1em;font-weight:800;opacity:.7}
+.gn-pot-details-total strong{font-size:clamp(2.4rem,8vw,3.5rem);line-height:1.1;font-weight:900}
+.gn-pot-details-total span,.gn-pot-details-note{opacity:.7;font-size:.88rem}
+#potDetailsContent h3{font-size:1rem;margin:20px 0 12px}
+.gn-pot-details-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #8882;font-size:.94rem}
+.gn-pot-details-row span{min-width:0;overflow-wrap:anywhere}
+.gn-pot-details-row strong{white-space:nowrap;font-variant-numeric:tabular-nums}
+.gn-pot-details-sum{font-weight:750;border-top:1px solid #8885;margin-top:6px}
+.gn-pot-details-track{height:9px;background:#8883;border-radius:99px;overflow:hidden;margin:12px 0 8px}
+.gn-pot-details-track>div{height:100%;background:linear-gradient(90deg,#e3a739,#f4d776);border-radius:inherit;transition:width .2s}
+.gn-pot-details-note{line-height:1.5;margin:8px 0}
+.gn-pot-details-history{margin-top:12px}
+.gn-pot-details-history summary{cursor:pointer;font-weight:650;padding:8px 0}
+#potDisplay{cursor:pointer}

@@ -11,7 +11,7 @@ function apply(){
   const design=designs[index].id;
   visual.dataset.design=design;
   const shell=visual.querySelector(".gn-art-shell");
-  if(shell)shell.src="assets/jackpots/"+design+"-"+(visual.dataset.stage||"empty")+".svg?v=layered1";
+  if(shell)shell.src="assets/jackpots/"+design+"-"+(visual.dataset.stage||"empty")+".png?v=isolated3d3";
  }
 }
 function set(id){const i=designs.findIndex(d=>d.id===id);if(i<0)return;index=i;try{localStorage.setItem(KEY,id)}catch(_){}apply();}
@@ -30,7 +30,7 @@ function shower(v,type){
  }
  setTimeout(()=>v.classList.remove('gn-tap-bounce'),650);
 }
-function animate(type){const v=document.getElementById("jackpotVisual");if(!v)return;shower(v,type);v.classList.remove("gn-pot-jiggle","gn-pot-shower");void v.offsetWidth;v.classList.add(type==="shower"?"gn-pot-shower":"gn-pot-jiggle");clearTimeout(v._gnInteractTimer);v._gnInteractTimer=setTimeout(()=>v.classList.remove("gn-pot-jiggle","gn-pot-shower"),900);}
+function animate(type){const v=document.getElementById("jackpotVisual");if(!v)return;if(typeof playPotTouchSound==="function")playPotTouchSound(v.dataset.design||designs[index].id);shower(v,type);v.classList.remove("gn-pot-jiggle","gn-pot-shower");void v.offsetWidth;v.classList.add(type==="shower"?"gn-pot-shower":"gn-pot-jiggle");clearTimeout(v._gnInteractTimer);v._gnInteractTimer=setTimeout(()=>v.classList.remove("gn-pot-jiggle","gn-pot-shower"),900);}
 function init(){
  apply();
  const swipe=document.getElementById("gnPotSwipe");

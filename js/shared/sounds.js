@@ -16,7 +16,7 @@ function loadSoundSettings() {
 function saveSoundSettings() {
     localStorage.setItem(SOUND_SETTINGS_KEY, JSON.stringify(soundSettings));
 }
-function setSoundEffectsEnabled(enabled) { soundSettings.soundEffects = Boolean(enabled); saveSoundSettings(); if(!enabled){if(typeof gnStopClip==='function')gnStopClip();if('speechSynthesis' in window)speechSynthesis.cancel();} }
+function setSoundEffectsEnabled(enabled) { soundSettings.soundEffects = Boolean(enabled); saveSoundSettings(); if(!enabled){if(typeof gnPotTouchAudio!=='undefined')gnPotTouchAudio.forEach(a=>{a.pause();a.currentTime=0;});if(typeof gnStopClip==='function')gnStopClip();if('speechSynthesis' in window)speechSynthesis.cancel();} }
 function setClickSoundsEnabled(enabled) { soundSettings.clickSounds = Boolean(enabled); saveSoundSettings(); }
 function audioContext() {
     if (!tongitsAudioContext) tongitsAudioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -54,13 +54,42 @@ function playSoundEffect(name) {
     else if (name === "magic") { [880,1175,1568].forEach((f,i)=>tone(f,.2,.025,"sine",i*.08)); }
     else if (name === "jackpot") { [523,659,784,1047,1319].forEach((f,i)=>tone(f,.2,.04,"triangle",i*.07)); setTimeout(()=>playSoundEffect("coins"),260); }
 }
+/* Recorded-style offline money effects; respect the Basic Sound Effects master toggle. */
+const GN_POT_TOUCH_FILES = Object.freeze({
+    pot: 'assets/sounds/jackpot/coin-drop.wav',
+    chest: 'assets/sounds/jackpot/treasure-cascade.wav',
+    bag: 'assets/sounds/jackpot/bag-jingle.wav',
+    vault: 'assets/sounds/jackpot/gold-bars.wav',
+    cash: 'assets/sounds/jackpot/cash-register.wav'
+});
+const gnPotTouchAudio = new Map();
+let gnLastPotTouchAt = 0;
+function playPotTouchSound(design) {
+    if (!soundSettings.soundEffects) return;
+    const now = Date.now();
+    if (now - gnLastPotTouchAt < 180) return;
+    gnLastPotTouchAt = now;
+    const key = Object.prototype.hasOwnProperty.call(GN_POT_TOUCH_FILES,design) ? design : 'pot';
+    try {
+        let audio = gnPotTouchAudio.get(key);
+        if (!audio) {
+            audio = new Audio(GN_POT_TOUCH_FILES[key]);
+            audio.preload = 'auto';
+            audio.volume = .78;
+            gnPotTouchAudio.set(key,audio);
+        }
+        audio.pause(); audio.currentTime = 0;
+        const result = audio.play();
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+    } catch (_) { /* Audio is optional and never blocks the game. */ }
+}
 function updateSoundSettingButtons() {
     const fx = document.getElementById("soundEffectsToggle"); const clicks = document.getElementById("clickSoundsToggle");
     if (fx) { fx.classList.toggle("selected", soundSettings.soundEffects); fx.setAttribute("aria-pressed", String(soundSettings.soundEffects)); fx.textContent = soundSettings.soundEffects ? "🔊 Sound Effects  ON" : "🔇 Sound Effects  OFF"; }
     if (clicks) { clicks.classList.toggle("selected", soundSettings.clickSounds); clicks.setAttribute("aria-pressed", String(soundSettings.clickSounds)); clicks.textContent = soundSettings.clickSounds ? "👆 Click Sounds  ON" : "👆 Click Sounds  OFF"; }
 }
 loadSoundSettings();
-document.addEventListener("click", e => { if (e.target.closest("button, .player-select-button, .pot-area")) playClickSound(); }, true);
+document.addEventListener("click", e => { if (e.target.closest("#gnPotSwipe")) return; if (e.target.closest("button, .player-select-button, .pot-area")) playClickSound(); }, true);
 
 /* Curated sound clips, local/offline. Respect app sound and Fun Mode controls. */
 const GAME_NIGHT_CLIPS = {
