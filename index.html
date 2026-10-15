@@ -1185,10 +1185,20 @@
 
         <div class="settings-divider"></div>
 
+        <button type="button" id="gnSoundSettingsHeader" class="gn-sound-accordion-head" aria-expanded="false" aria-controls="gnSoundSettingsPanel"><span>🔊 Basic Sound Effects</span><span class="gn-sound-accordion-hint">Tap to customize <span id="gnSoundAccordionArrow">⌄</span></span></button>
+        <div id="gnSoundSettingsPanel" class="gn-sound-accordion-panel" hidden>
+          <div class="sound-settings-grid">
+            <button id="soundEffectsToggle" class="sound-setting-button" type="button" aria-pressed="true">🔊 Sound Effects ON</button>
+            <p class="sound-setting-help">Subtle coin transfers, regular wins, pot celebrations, and game effects. Master switch for all audio.</p>
+            <button id="clickSoundsToggle" class="sound-setting-button" type="button" aria-pressed="true">👆 Click Sounds ON</button>
+            <p class="sound-setting-help">Soft interface taps.</p>
+          </div>
+        </div>
+        <div class="settings-divider"></div>
         <div class="settings-section-title">🎭 FUN MODE</div>
         <div class="fun-settings">
           <label class="fun-mode-switch-row" for="funEnabled">
-            <span class="fun-mode-switch-copy"><strong>Fun Mode</strong><small>Playful voice reactions and soundboard</small></span>
+            <span class="fun-mode-switch-copy"><strong>Fun Mode</strong><small>Avatar reactions and special win celebrations</small></span>
             <input id="funEnabled" type="checkbox" role="switch" aria-controls="funAdvanced" aria-expanded="false">
             <span class="fun-mode-switch-track" aria-hidden="true"><span></span></span>
           </label>
@@ -1200,20 +1210,13 @@
               <label class="fun-option-row" for="funRandom"><span>Occasional random reactions</span><span class="fun-option-switch"><input id="funRandom" type="checkbox" role="switch"><span class="fun-option-track" aria-hidden="true"><span></span></span></span></label>
               <label class="fun-option-row" for="funVoice"><span>Spoken commentary</span><span class="fun-option-switch"><input id="funVoice" type="checkbox" role="switch"><span class="fun-option-track" aria-hidden="true"><span></span></span></span></label>
               <p class="sound-setting-help">Custom lines are set separately for each player by tapping their avatar.</p><label>Voice preference <select id="funVoiceChoice"><option value="auto">Automatic (English / Filipino)</option></select></label><button type="button" id="funTestVoice" class="fun-test-voice">🔊 Test Voice</button><p class="sound-setting-help" id="funVoiceHelp">Available voices depend on your device. Filipino is offered when installed.</p>
+              <div class="gn-fun-sound-options"><div class="gn-pot-sound-setting"><label for="gnRegularWinSound">🏆 Regular win sound</label><select id="gnRegularWinSound"><option value="random">🎲 Random winning sounds</option><option value="cheering">👏 Crowd Cheering</option><option value="air-horn">📣 Air Horn</option><option value="happy-kids">🎉 Happy Kids</option><option value="heavenly">😇 Heavenly Choir</option><option value="library-35_EPIC_CHOIR_SUSPENSE">🎼 Epic Choir Suspense</option><option value="custom">🗣️ Custom winning line</option><option value="none">🔇 None</option></select><input id="gnRegularWinCustom" maxlength="160" placeholder="Well played, {name}!" aria-label="Custom regular win announcement" hidden><button type="button" class="gn-sound-preview" data-gn-preview="regular">▶ Preview</button><small>Plays for regular wins only when Fun Mode and Sound Effects are on.</small></div>
+<div class="gn-pot-sound-setting"><label for="gnPotWinSound">🏆 Pot win celebration sound</label><select id="gnPotWinSound"><option value="cheering">Crowd Cheering</option><option value="air-horn">Air Horn</option><option value="happy-kids">Happy Kids</option><option value="heavenly">Heavenly Choir</option><option value="library-35_EPIC_CHOIR_SUSPENSE">Epic Choir Suspense</option><option value="library-30_Drum_Roll">Drum Roll</option><option value="custom">Custom victory line</option><option value="none">No celebration sound</option></select><input id="gnPotWinCustom" maxlength="160" placeholder="Congratulations {name}! You won the pot!" aria-label="Custom pot win announcement"><button type="button" class="gn-sound-preview" data-gn-preview="pot">▶ Preview pot sound</button><small>Plays for pot wins only when Fun Mode and Sound Effects are on.</small></div>
+            <div class="gn-favorites-setting"><div class="gn-favorites-heading"><strong>🎛️ Default 10 avatar sounds</strong><button type="button" id="gnResetFavorites">Reset</button></div><p class="sound-setting-help">Choose exactly 10 sounds for the quick buttons in Tongits and Mahjong. All 50 remain in Browse Sounds.</p><div id="gnFavoritePicker" class="gn-favorite-picker" aria-label="Swipe through sound choices"></div><div class="gn-favorite-nav"><button type="button" id="gnFavoritePrev" aria-label="Previous sounds">‹</button><span id="gnFavoritePageLabel">1 / 5</span><button type="button" id="gnFavoriteNext" aria-label="Next sounds">›</button></div><small id="gnFavoriteCount" aria-live="polite">10 / 10 selected</small></div></div>
             </div>
           </div>
         </div>
         <div class="settings-divider"></div>
-        <div class="settings-section-title">SOUND</div>
-        <div class="sound-settings-grid">
-            <button id="soundEffectsToggle" class="sound-setting-button" type="button" aria-pressed="true">🔊 Sound Effects  ON</button>
-            <p class="sound-setting-help">Coins, wins, pot celebrations, prediction and Easter eggs.</p>
-            <button id="clickSoundsToggle" class="sound-setting-button" type="button" aria-pressed="true">👆 Click Sounds  ON</button>
-            <p class="sound-setting-help">Buttons, selections and normal interface taps.</p>
-        </div>
-
-        <div class="settings-divider"></div>
-
         <div class="settings-section-title">
             DATA
         </div>
@@ -1479,16 +1482,15 @@
 <div id="funOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Fun Mode soundboard">
   <div class="modal fun-modal">
     <div class="modal-top-bar"><h2 id="funPlayerTitle">🎭 Soundboard</h2><button id="funClose" class="modal-close-button" type="button" aria-label="Close soundboard">✕</button></div>
-    <p class="modal-subtitle">Choose a sound or voice reaction for this player.</p><label class="fun-custom-label" for="funPlayerCustom">🎤 Custom line for this player<input id="funPlayerCustom" type="text" maxlength="180" placeholder="Hey {name}, hurry up!"></label><p class="sound-setting-help">Saved for this player. Use {name} to insert their name.</p>
-    <div class="fun-sound-grid" id="funSoundGrid">
-      <button data-fun="hurry">⏰ Hurry Up</button><button data-fun="crickets">🦗 Crickets</button>
-      <button data-fun="roast">💀 Roast</button><button data-fun="laugh">😂 Laugh</button>
-      <button data-fun="clap">👏 Slow Clap</button><button data-fun="hype">🏆 Hype</button>
-      <button data-fun="custom">🎤 Custom Line</button><button data-fun="stop">🔇 Stop</button>
-    </div>
+    <p class="modal-subtitle">Tap a reaction, or browse the complete sound library.</p>
+    <div class="gn-sound-toolbar"><strong>🔊 Sounds</strong><button type="button" data-open-sound-library="tongits">Browse all 50 →</button></div>
+    <div class="fun-sound-grid" id="funClipGrid"></div>
+    <div class="gn-custom-line"><label for="funPlayerCustom">🎤 Custom line for this player</label><input id="funPlayerCustom" type="text" maxlength="180" placeholder="Hoy {name}, bayad na!"><button type="button" data-fun="custom">▶ Play line</button><button type="button" data-fun="stop">■ Stop</button></div>
+    <div id="funSoundGrid" hidden></div>
   </div>
 </div>
 
+<div id="gnSoundLibraryOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="All sounds"><div class="modal gn-library-modal"><div class="modal-top-bar"><h2>🔊 All Sounds</h2><button id="gnSoundLibraryClose" class="modal-close-button" type="button" aria-label="Close">✕</button></div><p class="modal-subtitle">Swipe sideways to browse. Tap any sound to play it.</p><div id="gnSoundLibraryPages" class="gn-sound-library-pages"></div><div class="gn-library-navigation"><button id="gnLibraryPrev" type="button" aria-label="Previous sounds page">‹</button><div id="gnLibraryDots" class="gn-library-dots" aria-label="Sound pages"></div><button id="gnLibraryNext" type="button" aria-label="Next sounds page">›</button></div><div class="gn-library-footer"><span id="gnLibraryPageLabel">1 / 5</span><button id="gnLibraryStop" type="button">■ Stop</button></div></div></div>
 <section id="mahjongSetupScreen" class="hidden mj-screen">
 <header class="mj-header"><h1>🀄 Filipino Mahjong</h1><button id="mjBackHome" class="gn-home-link" type="button">⌂ Games</button></header>
 <main class="mj-container"><h2>New Mahjong Game</h2><p class="mj-muted">Configure house rules before playing. You can change future-round rules later.</p>
@@ -1509,7 +1511,7 @@
 <div id="mjAvatarEmojis" class="mj-avatar-emojis"></div>
 <label class="mj-upload-photo" for="mjAvatarFile">📷 Upload Photo</label><input id="mjAvatarFile" type="file" accept="image/*" hidden>
 <button type="button" id="mjAvatarReset" class="gn-sub-button mj-wide">Reset to Emoji</button></div></div>
-<div id="mjFunDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong soundboard"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong id="mjFunTitle">🎭 Soundboard</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjFunDialog" aria-label="Close">✕</button></div><label class="mj-field">Custom line for this player<input id="mjFunCustomLine" maxlength="180" placeholder="Hey {name}, hurry up!"></label><p class="mj-muted">Use {name} for the player's name.</p><div class="mj-soundboard-grid"><button data-mj-fun="hurry">⏰ Hurry Up</button><button data-mj-fun="crickets">🦗 Crickets</button><button data-mj-fun="roast">💀 Roast</button><button data-mj-fun="laugh">😂 Laugh</button><button data-mj-fun="clap">👏 Slow Clap</button><button data-mj-fun="hype">🏆 Hype</button><button data-mj-fun="custom">🎤 Custom Line</button><button data-mj-fun="stop">🔇 Stop</button></div></div></div>
+<div id="mjFunDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong soundboard"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong id="mjFunTitle">🎭 Soundboard</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjFunDialog" aria-label="Close">✕</button></div><div class="gn-sound-toolbar"><strong>🔊 Sounds</strong><button type="button" data-open-sound-library="mahjong">Browse all 50 →</button></div><div class="mj-soundboard-grid" id="mjClipGrid"></div><div class="gn-custom-line"><label for="mjFunCustomLine">🎤 Custom line</label><input id="mjFunCustomLine" maxlength="180" placeholder="Hoy {name}, bayad na!"><button type="button" data-mj-fun="custom">▶ Play line</button><button type="button" data-mj-fun="stop">■ Stop</button></div></div></div></div>
 <div id="mjRulesDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong rules"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong>🀄 Mahjong Rules</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjRulesDialog" aria-label="Close">✕</button></div><div id="mjRulesContent"></div></div></div>
 <div id="mjSettingsDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong settings"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong>⚙️ Mahjong Settings</strong><button type="button" class="mj-dialog-close" data-mj-dismiss="mjSettingsDialog" aria-label="Close">✕</button></div><div class="mj-settings-group mj-legacy-settings" hidden aria-hidden="true"><h4>Appearance</h4><label class="mj-field">Theme<select id="mjTheme"><option value="light">☀️ Light</option><option value="dark">🌙 Dark</option></select></label></div><div class="mj-settings-group mj-legacy-settings" hidden aria-hidden="true"><h4>🎭 Fun Mode</h4><label class="mj-switch"><span><strong>Enable Fun Mode</strong><small>Shared with Tongits</small></span><input id="mjFunEnabled" type="checkbox"><span class="mj-track"></span></label><div id="mjFunOptions" class="hidden"><label class="mj-field">Commentator language<select id="mjFunLanguage"><option value="taglish">Taglish</option><option value="english">English</option><option value="tagalog">Tagalog</option></select></label><label class="mj-field">Roast level<select id="mjFunIntensity"><option value="friendly">Friendly</option><option value="savage">Savage but funny</option><option value="extra">Extra savage</option></select></label><label class="mj-switch"><span>Spoken commentary</span><input id="mjFunVoice" type="checkbox"><span class="mj-track"></span></label><label class="mj-switch"><span>Occasional reactions</span><input id="mjFunRandom" type="checkbox"><span class="mj-track"></span></label><label class="mj-field">Voice<select id="mjFunVoiceChoice"><option value="auto">Automatic</option></select></label><button id="mjFunTest" class="gn-sub-button" type="button">🔊 Test voice</button></div></div><div id="mjSharedSettings" class="mj-shared-settings"></div><div class="mj-settings-group"><div class="settings-section-title">GAME RULES · MAHJONG</div><div id="mjSettingsSlot"></div></div><div class="mj-settings-group"><div class="settings-section-title">DATA · MAHJONG</div><button id="mjNewGame" class="gn-sub-button" type="button">＋ New Mahjong Game</button><button id="mjClearGame" class="gn-sub-button mj-danger" type="button">🗑 Clear Mahjong Game</button><p class="mj-muted">Only Mahjong session data is deleted. Tongits remains saved.</p></div></div></div>
 <div id="mjActionDialog" class="mj-dialog hidden" role="dialog" aria-modal="true" aria-label="Mahjong action"><div class="mj-dialog-card mj-action-card"><div class="mj-dialog-head"><strong id="mjActionTitle">Mahjong</strong><button type="button" id="mjCloseAction" class="mj-dialog-close" aria-label="Close">✕</button></div><div id="mjActionSlot"></div></div></div>

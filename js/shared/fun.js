@@ -34,7 +34,7 @@ function funPopulateVoices(){
     : 'No Filipino voice is installed on this device. English fallback is available; Tagalog pronunciation may vary.';
 }
 function funSpeak(line){
-  if(!funMode.voice || !('speechSynthesis' in window))return;
+  if(!('speechSynthesis' in window))return;
   try{
     speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(line);
@@ -102,7 +102,7 @@ function funLine(type,name){
 }
 function funPlay(type,index=funTarget){
   if(!funMode.enabled)return;
-  if(type==='stop'){if('speechSynthesis' in window)speechSynthesis.cancel();return;}
+  if(type==='stop'){if('speechSynthesis' in window)speechSynthesis.cancel();gnStopClip();return;}
   const player=game?.players?.[index];if(!player)return;
   if(['crickets','laugh','clap','hype'].includes(type))funEffects(type);
   const line=funLine(type,player.name);
@@ -127,7 +127,8 @@ if('speechSynthesis' in window)speechSynthesis.addEventListener?.('voiceschanged
 funPopulateVoices();
 document.getElementById('funClose').addEventListener('click',()=>closeOverlay('funOverlay'));
 document.getElementById('funOverlay').addEventListener('click',e=>{if(e.target.id==='funOverlay')closeOverlay('funOverlay');});
-document.getElementById('funSoundGrid').addEventListener('click',e=>{const button=e.target.closest('[data-fun]');if(button)funPlay(button.dataset.fun);});
+document.getElementById('funClipGrid').addEventListener('click',e=>{const btn=e.target.closest('[data-fun-clip]');if(btn && funMode.enabled)gnPlayClip(btn.dataset.funClip,{manual:true});});
+document.querySelector('#funOverlay .gn-custom-line').addEventListener('click',e=>{const button=e.target.closest('[data-fun]');if(button)funPlay(button.dataset.fun);});
 document.addEventListener('click',e=>{const avatar=e.target.closest('[data-fun-avatar]');if(avatar&&funMode.enabled)funOpen(Number(avatar.dataset.funAvatar));});
 document.addEventListener('keydown',e=>{const avatar=e.target.closest?.('[data-fun-avatar]');if(avatar&&funMode.enabled&&(e.key==='Enter'||e.key===' ')){e.preventDefault();funOpen(Number(avatar.dataset.funAvatar));}});
 // Occasional reactions after a completed round. No timers, polling, or background audio.
