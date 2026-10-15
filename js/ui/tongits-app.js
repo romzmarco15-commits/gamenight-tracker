@@ -1252,8 +1252,10 @@ if (loaded && (game?.mode === 'cash' || game?.ledgerVersion !== 2)) {
    EASTER EGGS
 ========================================= */
 let potEggTaps = [];
-let predictionTimer = null;
 let predictionRunning = false;
+let fortuneTimeouts = [];
+let fortuneAudioTimer = null;
+let fortuneSelectedIndex = -1;
 let lastMilestoneCelebrated = 0;
 
 function eggToast(message, duration = 2200) {
@@ -1264,18 +1266,120 @@ function eggToast(message, duration = 2200) {
     clearTimeout(eggToast._timer);
     eggToast._timer = setTimeout(() => toast.classList.add("hidden"), duration);
 }
-
+function fortuneLater(callback, delay) {
+    const id = setTimeout(callback, delay);
+    fortuneTimeouts.push(id);
+}
+function fortuneCleanup() {
+    fortuneTimeouts.forEach(clearTimeout);
+    fortuneTimeouts = [];
+    if (fortuneAudioTimer) clearInterval(fortuneAudioTimer);
+    fortuneAudioTimer = null;
+}
+function fortuneParticleType() {
+    const design = window.GameNightPotDesign?.get?.() || 'pot';
+    return design === 'cash' ? 'cash' : design === 'vault' ? 'bar' : 'coin';
+}
+function fortuneBurst(count = 48) {
+    const layer = document.getElementById('fortuneParticles');
+    if (!layer) return;
+    const kind = fortuneParticleType();
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('i');
+        el.className = 'gn-fortune-particle gn-particle-' + kind;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 95 + Math.random() * 270;
+        el.style.setProperty('--fly-x', Math.round(Math.cos(angle) * distance) + 'px');
+        el.style.setProperty('--fly-y', Math.round(Math.sin(angle) * distance) + 'px');
+        el.style.setProperty('--delay', (Math.random() * .65) + 's');
+        el.style.setProperty('--spin', (Math.random() * 1080 - 540) + 'deg');
+        layer.appendChild(el);
+        setTimeout(() => el.remove(), 3100);
+    }
+}
+function fortuneAvatar(player) {
+    return '<span class="gn-fortune-avatar">' + avatarContent(player.avatar) + '</span>';
+}
+function fortuneReveal() {
+    if (!predictionRunning || !game?.players?.length) return;
+    fortuneCleanup();
+    const player = game.players[fortuneSelectedIndex];
+    if (!player) { fortuneClose(); return; }
+    const modal = document.getElementById('fortuneModal');
+    const roulette = document.getElementById('predictionRoulette');
+    const result = document.getElementById('predictionResult');
+    modal.classList.remove('gn-fortune-rolling', 'gn-fortune-awakening');
+    modal.classList.add('gn-fortune-revealed');
+    document.getElementById('fortuneTitle').textContent = 'THE FORTUNE HAS SPOKEN!';
+    document.getElementById('fortuneSubtitle').textContent = '👑 The jackpot has chosen its favorite 👑';
+    roulette.innerHTML = fortuneAvatar(player) + '<span class="gn-fortune-name">' + escapeHtml(player.name) + '</span>';
+    result.textContent = 'IS DESTINED TO WIN THE POT!';
+    document.getElementById('fortuneProgress').classList.add('hidden');
+    document.getElementById('skipPredictionButton').classList.add('hidden');
+    fortuneBurst(62);
+    if (typeof playSoundEffect === 'function') playSoundEffect('jackpot');
+    game.easterPrediction = { playerIndex: fortuneSelectedIndex, playerName: player.name };
+    saveGame();
+    predictionRunning = false;
+}
+function fortuneClose() {
+    fortuneCleanup();
+    predictionRunning = false;
+    closeOverlay('predictionOverlay');
+}
 function openPotPrediction() {
-    if (!game || !game.players || !game.players.length) return;
-    document.getElementById("predictionRoulette").textContent = "Tap PREDICT";
-    document.getElementById("predictionResult").textContent = "";
-    document.getElementById("runPredictionButton").disabled = false;
-    openOverlay("predictionOverlay");
+    if (!game?.players?.length || predictionRunning) return;
+    fortuneCleanup();
+    predictionRunning = true;
+    // Choose once at the beginning: animation cannot influence the result.
+    fortuneSelectedIndex = Math.floor(Math.random() * game.players.length);
+    const modal = document.getElementById('fortuneModal');
+    modal.classList.remove('gn-fortune-revealed', 'gn-fortune-rolling');
+    modal.classList.add('gn-fortune-awakening');
+    document.getElementById('fortuneTitle').textContent = 'THE FORTUNE AWAKENS';
+    document.getElementById('fortuneSubtitle').textContent = 'The jackpot is choosing its favorite…';
+    document.getElementById('predictionRoulette').textContent = '✨ Gathering the stars…';
+    document.getElementById('predictionResult').textContent = '';
+    document.getElementById('fortuneProgress').classList.remove('hidden');
+    document.getElementById('skipPredictionButton').classList.add('hidden');
+    document.getElementById('fortuneParticles').replaceChildren();
+    openOverlay('predictionOverlay');
+    fortuneBurst(14);
+    if (typeof playSoundEffect === 'function') playSoundEffect('magic');
+    fortuneLater(() => document.getElementById('skipPredictionButton').classList.remove('hidden'), 2000);
+    fortuneLater(() => {
+        if (!predictionRunning) return;
+        modal.classList.remove('gn-fortune-awakening');
+        modal.classList.add('gn-fortune-rolling');
+        document.getElementById('fortuneTitle').textContent = 'THE FORTUNE ROULETTE';
+        document.getElementById('fortuneSubtitle').textContent = 'Who will the jackpot choose?';
+        const roulette = document.getElementById('predictionRoulette');
+        const start = performance.now();
+        let ticks = 0;
+        const spin = () => {
+            if (!predictionRunning) return;
+            const elapsed = performance.now() - start;
+            if (elapsed >= 4000) {
+                roulette.textContent = '✨  ...  ✨';
+                document.getElementById('fortuneSubtitle').textContent = 'The stars are aligning…';
+                fortuneLater(fortuneReveal, 700);
+                return;
+            }
+            const p = game.players[ticks % game.players.length];
+            roulette.innerHTML = fortuneAvatar(p) + '<span class="gn-fortune-name">' + escapeHtml(p.name) + '</span>';
+            if (typeof playSoundEffect === 'function') playSoundEffect('roll');
+            ticks++;
+            // Increasing delay produces a genuine roulette slowdown.
+            const progress = elapsed / 4000;
+            fortuneLater(spin, Math.round(90 + 650 * Math.pow(progress, 2.3)));
+        };
+        spin();
+    }, 2100);
 }
 
-document.getElementById("potArea").addEventListener("click", function (event) {
-    if (event.target.closest(".gn-pot-arrow, .gn-pot-dots, #potDisplay")) return;
-    if (!game || game.finished) return;
+document.getElementById('potArea').addEventListener('click', function (event) {
+    if (event.target.closest('.gn-pot-arrow, .gn-pot-dots, #potDisplay')) return;
+    if (!game || game.finished || predictionRunning) return;
     const now = Date.now();
     potEggTaps = potEggTaps.filter(t => now - t <= 4500);
     potEggTaps.push(now);
@@ -1285,49 +1389,16 @@ document.getElementById("potArea").addEventListener("click", function (event) {
     }
 });
 
-document.getElementById("potDisplay").addEventListener("click", function(event){
+document.getElementById('potDisplay').addEventListener('click', function(event){
     event.stopPropagation();
     showPotDetails();
 });
-document.getElementById("closePotDetailsButton").addEventListener("click", () => closeOverlay("potDetailsOverlay"));
-document.getElementById("potDetailsOverlay").addEventListener("click", function(event){
-    if (event.target === this) closeOverlay("potDetailsOverlay");
+document.getElementById('closePotDetailsButton').addEventListener('click', () => closeOverlay('potDetailsOverlay'));
+document.getElementById('potDetailsOverlay').addEventListener('click', function(event){
+    if (event.target === this) closeOverlay('potDetailsOverlay');
 });
-
-document.getElementById("closePredictionButton").addEventListener("click", () => {
-    if (!predictionRunning) closeOverlay("predictionOverlay");
-});
-
-document.getElementById("runPredictionButton").addEventListener("click", function () {
-    if (!game || predictionRunning) return;
-    predictionRunning = true;
-    this.disabled = true;
-    const roulette = document.getElementById("predictionRoulette");
-    const result = document.getElementById("predictionResult");
-    roulette.classList.add("spinning");
-    result.textContent = "Consulting extremely reliable sources...";
-    let ticks = 0;
-    clearInterval(predictionTimer);
-    predictionTimer = setInterval(() => {
-        const p = game.players[ticks % game.players.length];
-        roulette.textContent = `${p.name} ${["🔮","🪙","✨"][ticks % 3]}`;
-        if (typeof playSoundEffect === "function") playSoundEffect("roll");
-        ticks++;
-    }, 90);
-    setTimeout(() => {
-        clearInterval(predictionTimer);
-        const winnerIndex = Math.floor(Math.random() * game.players.length);
-        const player = game.players[winnerIndex];
-        roulette.classList.remove("spinning");
-        roulette.textContent = `🔮 ${player.name}`;
-        result.textContent = `Prediction: ${player.name} will win the pot!`;
-        if (typeof playSoundEffect === "function") playSoundEffect("reveal");
-        game.easterPrediction = { playerIndex: winnerIndex, playerName: player.name };
-        saveGame();
-        predictionRunning = false;
-        document.getElementById("runPredictionButton").disabled = false;
-    }, 2400);
-});
+document.getElementById('closePredictionButton').addEventListener('click', fortuneClose);
+document.getElementById('skipPredictionButton').addEventListener('click', fortuneReveal);
 
 // Long-press a player card/avatar: Main Character Energy.
 let eggLongPressTimer = null;

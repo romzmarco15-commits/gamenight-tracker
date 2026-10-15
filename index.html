@@ -1473,16 +1473,20 @@
   </div>
 </div>
 
-<!-- EASTER EGG: POT PREDICTION -->
-<div id="predictionOverlay" class="overlay hidden">
-  <div class="modal prediction-modal">
-    <button id="closePredictionButton" class="modal-close-button" type="button" aria-label="Close">✕</button>
-    <div class="prediction-orb">🔮</div>
-    <h2>POT PREDICTION</h2>
-    <p class="prediction-subtitle">The Tongits gods have spoken...</p>
-    <div id="predictionRoulette" class="prediction-roulette">Tap PREDICT</div>
-    <div id="predictionResult" class="prediction-result"></div>
-    <button id="runPredictionButton" class="primary-button full-width" type="button">PREDICT</button>
+<!-- EASTER EGG: AUTOMATIC GRAND FORTUNE REVEAL -->
+<div id="predictionOverlay" class="overlay hidden gn-fortune-overlay" role="dialog" aria-modal="true" aria-label="Jackpot fortune prediction">
+  <div class="modal prediction-modal gn-fortune-modal" id="fortuneModal">
+    <div id="fortuneParticles" class="gn-fortune-particles" aria-hidden="true"></div>
+    <button id="closePredictionButton" class="modal-close-button" type="button" aria-label="Close prediction">✕</button>
+    <div class="gn-fortune-kicker">✦ THE JACKPOT ORACLE ✦</div>
+    <div class="prediction-orb" id="fortuneOrb">🔮</div>
+    <h2 id="fortuneTitle">THE FORTUNE AWAKENS</h2>
+    <p class="prediction-subtitle" id="fortuneSubtitle">The jackpot is choosing its favorite…</p>
+    <div id="predictionRoulette" class="prediction-roulette" aria-live="off">✨ Gathering the stars…</div>
+    <div id="fortuneProgress" class="gn-fortune-progress"><span></span></div>
+    <div id="predictionResult" class="prediction-result" aria-live="polite"></div>
+    <p class="gn-fortune-disclaimer">Just for fun · No effect on actual scores</p>
+    <button id="skipPredictionButton" class="gn-fortune-skip hidden" type="button">Skip animation →</button>
   </div>
 </div>
 <div id="easterToast" class="easter-toast hidden"></div>

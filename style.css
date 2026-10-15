@@ -3045,3 +3045,61 @@ body[data-theme="light"] .gn-game-tile,body[data-theme="light"] .mj-panel,body[d
 .gn-pot-details-history{margin-top:12px}
 .gn-pot-details-history summary{cursor:pointer;font-weight:650;padding:8px 0}
 #potDisplay{cursor:pointer}
+
+/* Cinematic automatic pot fortune reveal */
+.gn-fortune-overlay{background:rgba(3,3,16,.92)!important;backdrop-filter:blur(12px);z-index:9999}
+.gn-fortune-modal{position:relative;isolation:isolate;overflow:hidden;min-height:440px;max-width:440px;width:calc(100vw - 32px);background:radial-gradient(ellipse at 50% 42%,#40305c 0%,#17132d 55%,#090b18 100%)!important;border:1px solid #ae854d!important;color:#fff!important;box-shadow:0 0 80px #d4a42c44, inset 0 0 55px #d8b54b13;padding:36px 22px 24px!important;text-align:center}
+.gn-fortune-modal .modal-close-button{z-index:6;color:#fff}
+.gn-fortune-kicker{font-size:.73rem;letter-spacing:.26em;font-weight:800;color:#eec66f;margin:12px 0}
+.gn-fortune-modal h2{font-size:1.28rem;letter-spacing:.08em;color:#ffdf8c;text-shadow:0 0 25px #ffc34266;margin:8px 0}
+.gn-fortune-modal .prediction-subtitle{color:#d6c6e2;opacity:1;margin:10px 0 18px;font-size:.9rem}
+.gn-fortune-modal .prediction-orb{font-size:4.5rem;filter:drop-shadow(0 0 22px #f4c76b);animation:gn-fortune-orb 2s ease-in-out infinite}
+.gn-fortune-awakening .prediction-orb{animation:gn-fortune-orb 1.2s ease-in-out infinite,gn-fortune-wake 2.1s ease-in both}
+.gn-fortune-modal .prediction-roulette{min-height:110px;margin:14px 0;background:linear-gradient(120deg,#322444,#241c39,#322444);border:1px solid #cfa75b55;color:#ffe7ac;box-shadow:inset 0 0 28px #090513;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;font-size:1.3rem;text-shadow:0 0 12px #f5c66755}
+.gn-fortune-rolling .prediction-roulette{animation:gn-fortune-pulse .38s ease-in-out infinite alternate}
+.gn-fortune-avatar{display:flex;align-items:center;justify-content:center;width:66px;height:66px;border-radius:50%;background:radial-gradient(circle,#69518b,#2a1c3f);border:3px solid #e5b954;box-shadow:0 0 25px #e5b95488;font-size:2.3rem;overflow:hidden}
+.gn-fortune-avatar img{width:100%;height:100%;object-fit:cover}
+.gn-fortune-name{font-size:clamp(1.25rem,5vw,1.85rem);font-weight:900;overflow-wrap:anywhere;line-height:1.15}
+.gn-fortune-modal .prediction-result{color:#ffdf80;font-size:1.1rem;letter-spacing:.06em;text-shadow:0 0 20px #ffbd37aa;min-height:36px;margin:14px 0}
+.gn-fortune-progress{height:4px;border-radius:6px;background:#ffffff24;overflow:hidden;margin:18px 0}
+.gn-fortune-progress span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#f6a635,#fff4b5,#d58b27);transform-origin:left;animation:gn-fortune-timeline 6.8s linear forwards}
+.gn-fortune-disclaimer{font-size:.7rem;color:#b3a5c6;margin:14px 0 0}
+.gn-fortune-skip{background:none;border:0;color:#d8c5a3;text-decoration:underline;cursor:pointer;margin-top:15px;padding:8px;font-size:.8rem}
+.gn-fortune-revealed{animation:gn-fortune-impact .7s ease-out;box-shadow:0 0 110px #f3c24c88,inset 0 0 90px #e2aa3544}
+.gn-fortune-revealed .prediction-orb{animation:gn-fortune-orb 3s ease-in-out infinite}
+.gn-fortune-revealed .prediction-roulette{background:radial-gradient(ellipse,#6a4b2a,#281e37);border:2px solid #ffda7e;box-shadow:0 0 45px #f6b83266,inset 0 0 40px #ffb93220;animation:gn-fortune-reveal .8s cubic-bezier(.16,1.4,.4,1) both}
+.gn-fortune-revealed .gn-fortune-avatar{width:94px;height:94px;font-size:3.4rem}
+.gn-fortune-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:5}
+.gn-fortune-particle{position:absolute;left:50%;top:49%;display:block;background-position:center;background-size:contain;background-repeat:no-repeat;opacity:0;animation:gn-fortune-fly 2.2s var(--delay) cubic-bezier(.2,.6,.3,1) both;transform-origin:center}
+.gn-fortune-particle.gn-particle-coin{width:28px;height:28px}
+.gn-fortune-particle.gn-particle-cash{width:42px;height:30px}
+.gn-fortune-particle.gn-particle-bar{width:36px;height:28px}
+@keyframes gn-fortune-orb{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.09)}}
+@keyframes gn-fortune-wake{0%{filter:drop-shadow(0 0 2px #a98435)}100%{filter:drop-shadow(0 0 35px #f6c15b)}}
+@keyframes gn-fortune-pulse{from{box-shadow:inset 0 0 20px #110d1b}to{box-shadow:0 0 25px #ffd05b55,inset 0 0 40px #aa803b44}}
+@keyframes gn-fortune-timeline{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes gn-fortune-impact{0%{transform:scale(.95);filter:brightness(3)}25%{transform:scale(1.04)}100%{transform:scale(1);filter:brightness(1)}}
+@keyframes gn-fortune-reveal{0%{transform:scale(.4) rotate(-8deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes gn-fortune-fly{0%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(0)}12%{opacity:1}75%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--fly-x)),calc(-50% + var(--fly-y))) scale(1.2) rotate(var(--spin))}}
+@media(prefers-reduced-motion:reduce){.gn-fortune-modal *{animation-duration:.01ms!important}.gn-fortune-particle{display:none}}
+
+/* Compact jackpot spacing only: keep artwork at its existing rendered size.
+   The visual viewport is shorter, while the artwork is centered and allowed
+   to extend into the unused transparent space above and below. */
+.pot-area{padding-top:12px;padding-bottom:12px}
+.gn-pot-carousel{margin-top:0!important;margin-bottom:0!important}
+#jackpotVisual.pot-visual{height:206px!important;margin-top:0!important;margin-bottom:0!important}
+#jackpotVisual .gn-artwork{top:50%!important;bottom:auto!important;height:258px!important;transform:translateY(-50%)}
+@media(max-width:480px){
+  .pot-area{padding-top:10px;padding-bottom:10px}
+  #jackpotVisual.pot-visual{height:174px!important}
+  #jackpotVisual .gn-artwork{height:220px!important}
+}
+
+/* Keep overflow money below the jackpot amount and its helper text.
+   Shift only the five ambient particles; do not resize the pot or its panel. */
+#jackpotVisual .gn-art-particles i:nth-child(1){--y:47%}
+#jackpotVisual .gn-art-particles i:nth-child(2){--y:32%}
+#jackpotVisual .gn-art-particles i:nth-child(3){--y:65%}
+#jackpotVisual .gn-art-particles i:nth-child(4){--y:27%}
+#jackpotVisual .gn-art-particles i:nth-child(5){--y:23%}

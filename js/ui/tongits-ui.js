@@ -898,10 +898,9 @@ function renderGame() {
 
     // Remember which players had their breakdown expanded before redrawing the cards.
     // The entire card is recreated after every round, so native <details> state was lost.
-    const expandedPlayers = new Set(
-        [...container.querySelectorAll('[data-player-ledger]:not([hidden])')]
-            .map(el => Number(el.dataset.playerLedger))
-    );
+    // Preserve the user's explicit open/closed choices across all game updates,
+    // including intermediate renders during wins and pot celebrations.
+    const expandedPlayers = expandedPlayerDetails;
     container.innerHTML = "";
 
     game.players.forEach(
@@ -1008,6 +1007,8 @@ function renderGame() {
             const toggle = card.querySelector('[data-ledger-toggle]');
             if (toggle && ledger) toggle.addEventListener('click', () => {
                 ledger.hidden = !ledger.hidden;
+                if (ledger.hidden) expandedPlayerDetails.delete(index);
+                else expandedPlayerDetails.add(index);
                 toggle.setAttribute('aria-expanded', String(!ledger.hidden));
                 toggle.querySelector('.player-ledger-chevron').textContent = ledger.hidden ? '⌄' : '⌃';
             });
