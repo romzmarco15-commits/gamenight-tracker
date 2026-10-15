@@ -2,7 +2,7 @@
 (function(){
 "use strict";
 const KEY="gameNightPotDesignV1";
-const designs=[{id:"pot",name:"Classic Pot"},{id:"chest",name:"Treasure Chest"},{id:"bag",name:"Money Bag"},{id:"vault",name:"Jackpot Vault"}];
+const designs=[{id:"pot",name:"Classic Pot"},{id:"chest",name:"Treasure Chest"},{id:"bag",name:"Money Bag"},{id:"vault",name:"Jackpot Vault"},{id:"cash",name:"Cash Money Stack"}];
 let index=0;
 try{const saved=localStorage.getItem(KEY);const i=designs.findIndex(d=>d.id===saved);if(i>=0)index=i;}catch(_){}
 function apply(){
@@ -11,12 +11,26 @@ function apply(){
   const design=designs[index].id;
   visual.dataset.design=design;
   const shell=visual.querySelector(".gn-art-shell");
-  if(shell)shell.src="assets/jackpots/"+design+"-"+(visual.dataset.stage||"empty")+".svg";
+  if(shell)shell.src="assets/jackpots/"+design+"-"+(visual.dataset.stage||"empty")+".svg?v=layered1";
  }
 }
 function set(id){const i=designs.findIndex(d=>d.id===id);if(i<0)return;index=i;try{localStorage.setItem(KEY,id)}catch(_){}apply();}
 function cycle(delta){set(designs[(index+delta+designs.length)%designs.length].id);}
-function animate(type){const v=document.getElementById("jackpotVisual");if(!v)return;v.classList.remove("gn-pot-jiggle","gn-pot-shower");void v.offsetWidth;v.classList.add(type==="shower"?"gn-pot-shower":"gn-pot-jiggle");clearTimeout(v._gnInteractTimer);v._gnInteractTimer=setTimeout(()=>v.classList.remove("gn-pot-jiggle","gn-pot-shower"),900);}
+function shower(v,type){
+ if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ v.classList.remove('gn-tap-bounce');void v.offsetWidth;v.classList.add('gn-tap-bounce');
+ const cash=v.dataset.design==='cash';const count=type==='shower'?16:9;
+ for(let i=0;i<count;i++){
+  const coin=document.createElement('span');coin.className='gn-tap-coin';coin.classList.add(cash?'gn-particle-cash':v.dataset.design==='vault'?'gn-particle-bar':'gn-particle-coin');
+  coin.style.setProperty('--x',`${Math.round((Math.random()-.5)*210)}px`);
+  coin.style.setProperty('--y',`${Math.round(Math.random()*50)}px`);
+  coin.style.setProperty('--spin',`${Math.round((Math.random()-.5)*550)}deg`);
+  coin.style.setProperty('--delay',`${i*27}ms`);
+  v.appendChild(coin);setTimeout(()=>coin.remove(),1450);
+ }
+ setTimeout(()=>v.classList.remove('gn-tap-bounce'),650);
+}
+function animate(type){const v=document.getElementById("jackpotVisual");if(!v)return;shower(v,type);v.classList.remove("gn-pot-jiggle","gn-pot-shower");void v.offsetWidth;v.classList.add(type==="shower"?"gn-pot-shower":"gn-pot-jiggle");clearTimeout(v._gnInteractTimer);v._gnInteractTimer=setTimeout(()=>v.classList.remove("gn-pot-jiggle","gn-pot-shower"),900);}
 function init(){
  apply();
  const swipe=document.getElementById("gnPotSwipe");

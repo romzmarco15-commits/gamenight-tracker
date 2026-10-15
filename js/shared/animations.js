@@ -314,40 +314,60 @@ async function animateRoundPotContribution() {
     POT -> WINNER
 */
 
-async function animatePotToWinner(
-    winnerIndex,
-    amount
-) {
-    const potPosition =
-        elementCenter(
-            potElement()
-        );
-
-
-    const winnerPosition =
-        elementCenter(
-            playerCard(
-                winnerIndex
-            )
-        );
-
-
-    if (typeof playSoundEffect === "function") playSoundEffect("potwin");
-
-    createFlyingMoney(
-        `+${money(amount)}`,
-        potPosition,
-        winnerPosition,
-        "big-pot"
-    );
-
-
-    await wait(650);
-
-
-    flashWinner(
-        winnerIndex
-    );
+async function animatePotToWinner(winnerIndex, amount) {
+    const pot = document.getElementById('jackpotVisual') || potElement();
+    const card = playerCard(winnerIndex);
+    if (!pot || !card) { await wait(450); return; }
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const start = elementCenter(pot), end = elementCenter(card);
+    if (reduceMotion) {
+        createFlyingMoney(`+${money(amount)}`,start,end,'big-pot');
+        await wait(650); flashWinner(winnerIndex); return;
+    }
+    const design = window.GameNightPotDesign?.get?.() || 'pot';
+    const isCash = design === 'cash';
+    const isVault = design === 'vault';
+    const particleType = isCash ? 'cash' : isVault ? 'bar' : 'coin';
+    const layer = document.createElement('div');
+    layer.className = 'gn-grand-transfer';
+    layer.setAttribute('aria-hidden','true');
+    document.body.appendChild(layer);
+    const glow = document.createElement('div');
+    glow.className='gn-grand-burst';
+    glow.style.left = start.x+'px';glow.style.top=start.y+'px';
+    layer.appendChild(glow);
+    const label = document.createElement('div');
+    label.className='gn-grand-amount';label.textContent=money(amount);
+    label.style.left=start.x+'px';label.style.top=(start.y-36)+'px';
+    layer.appendChild(label);
+    pot.classList.add('gn-grand-pot-active');
+    if(typeof playSoundEffect==='function') playSoundEffect('coin');
+    const count=36;
+    for(let i=0;i<count;i++){
+        const piece=document.createElement('span');
+        piece.className='gn-grand-piece'+(isCash?' gn-grand-cash':'');
+        piece.classList.add('gn-particle-'+particleType);
+        const angle=i*2.39996;
+        const radius=14+Math.sqrt(i/count)*65;
+        const ox=Math.cos(angle)*radius, oy=Math.sin(angle)*radius*.7;
+        const delay=210+i*28;
+        const duration=900+(i%6)*55;
+        piece.style.left=start.x+'px';piece.style.top=start.y+'px';
+        piece.style.setProperty('--burst-x',ox+'px');piece.style.setProperty('--burst-y',oy+'px');
+        piece.style.setProperty('--fly-x',(end.x-start.x)+'px');
+        piece.style.setProperty('--fly-y',(end.y-start.y)+'px');
+        piece.style.setProperty('--twist',((i%2?1:-1)*(90+i*27))+'deg');
+        piece.style.animationDelay=delay+'ms';piece.style.animationDuration=duration+'ms';
+        layer.appendChild(piece);
+    }
+    await wait(1650);
+    card.classList.add('gn-grand-winner-glow');
+    if(typeof playSoundEffect==='function')playSoundEffect('coin');
+    await wait(350);
+    flashWinner(winnerIndex);
+    pot.classList.remove('gn-grand-pot-active');
+    layer.remove();
+    setTimeout(()=>card.classList.remove('gn-grand-winner-glow'),1600);
 }
 /* Quick Pay: payer cards send money to the receiver; no balance mutations. */
 async function animateQuickPayTransfers(payments, receiverIndex) {

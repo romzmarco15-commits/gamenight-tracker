@@ -639,7 +639,7 @@ function renderPot() {
         visual.dataset.stage = currentPot <= 0 ? "empty" : level >= 90 ? "overflow" : level >= 65 ? "full" : level >= 35 ? "growing" : "low";
         visual.dataset.pot = String(currentPot);
         const jackpotArtwork = visual.querySelector(".gn-art-shell");
-        if (jackpotArtwork) jackpotArtwork.src = "assets/jackpots/" + visual.dataset.design + "-" + visual.dataset.stage + ".svg";
+        if (jackpotArtwork) jackpotArtwork.src = "assets/jackpots/" + visual.dataset.design + "-" + visual.dataset.stage + ".svg?v=layered1";
         if (visual.dataset.ready === "yes" && currentPot > previousPot && !game.finished) {
             visual.classList.remove("jackpot-added");
             void visual.offsetWidth;

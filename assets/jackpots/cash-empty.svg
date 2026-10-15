@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 290" width="400" height="290"><defs>
+<linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2a4"/><stop offset=".25" stop-color="#f6b72c"/><stop offset=".55" stop-color="#c67b0c"/><stop offset=".78" stop-color="#ffe071"/><stop offset="1" stop-color="#a65106"/></linearGradient>
+<linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff7259"/><stop offset=".4" stop-color="#be1830"/><stop offset=".8" stop-color="#730b20"/><stop offset="1" stop-color="#ec4550"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b55b32"/><stop offset=".55" stop-color="#632818"/><stop offset="1" stop-color="#3b160d"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0e3bf"/><stop offset=".23" stop-color="#9b8f80"/><stop offset=".6" stop-color="#4b4b55"/><stop offset=".9" stop-color="#8d8277"/></linearGradient>
+<linearGradient id="case" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#77707a"/><stop offset=".25" stop-color="#34323b"/><stop offset=".8" stop-color="#13141b"/><stop offset="1" stop-color="#5a5360"/></linearGradient>
+<linearGradient id="cash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#efffe2"/><stop offset=".45" stop-color="#a4d3b0"/><stop offset="1" stop-color="#40845c"/></linearGradient>
+<radialGradient id="gem"><stop stop-color="#effaff"/><stop offset=".4" stop-color="#4dd3ff"/><stop offset="1" stop-color="#1722a9"/></radialGradient>
+<clipPath id="potInner"><path d="M111 102 Q200 111 289 102 L280 159 Q200 184 120 159Z"/></clipPath>
+<clipPath id="bagInner"><path d="M142 92 Q200 103 258 92 L255 115 Q200 131 145 115Z"/></clipPath>
+<clipPath id="chestInner"><path d="M111 130 L287 130 L287 180 L111 180Z"/></clipPath>
+<clipPath id="vaultInner"><path d="M145 76 L294 76 L294 195 L145 195Z"/></clipPath>
+<clipPath id="cashInner"><path d="M109 134 L287 134 L287 187 L109 187Z"/></clipPath>
+</defs><path d="M99 137 L303 137 L295 222 Q200 243 105 222Z" fill="url(#case)" stroke="url(#gold)" stroke-width="7"/><path d="M95 134 L112 56 Q200 33 286 56 L306 134 L286 138 L274 77 Q200 64 127 77 L115 139Z" fill="url(#case)" stroke="url(#gold)" stroke-width="8"/><path d="M109 134 L287 134 L287 185 L109 185Z" fill="#121a17"/><g clip-path="url(#cashInner)"></g><path d="M99 181 L303 181 L295 222 Q200 243 105 222Z" fill="url(#case)" stroke="url(#gold)" stroke-width="5"/><path d="M171 225 Q170 252 185 252 H215 Q230 252 229 225" fill="none" stroke="#d4d3ce" stroke-width="8"/><path d="M112 190 H129 V215 H112Z M270 190 H288 V215 H270Z" fill="url(#gold)"/></svg>
