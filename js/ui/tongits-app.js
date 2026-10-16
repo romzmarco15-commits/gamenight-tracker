@@ -805,8 +805,8 @@ document.getElementById(
     "undoButton"
 ).addEventListener(
     "click",
-    function () {
-
+    async function () {
+        if (!await window.GameNightUI.confirm('Undo the last Tongits transaction?', 'Undo Action', 'Undo')) return;
         if (!undoLastRound()) {
             showMessage(
                 "Nothing to Undo",

@@ -6,7 +6,7 @@
  const view=window.MahjongUI.create({getState:()=>state,getRules:()=>rules,getSetupPlayers:()=>setupPlayers,getCount:()=>count,getSelectedBonuses:()=>selectedBonuses,fmt:n=>fmt(n)});
  const fmt=n=>`${state?.currency||$('mjCurrency').value}${L.round(n)}`;
  function status(msg){$('mjStatus').textContent=msg||''}
- function navigate(screen){if(actionOpen)closeAction();['homeScreen','setupScreen','gameScreen','mahjongSetupScreen','mahjongGameScreen'].forEach(id=>$(id).classList.toggle('hidden',id!==screen));window.scrollTo(0,0)}
+ function navigate(screen){if(actionOpen)closeAction();['homeScreen','setupScreen','gameScreen','mahjongSetupScreen','mahjongGameScreen','l9Setup','l9Game','pkSetup','pkGame'].forEach(id=>$(id).classList.toggle('hidden',id!==screen));window.scrollTo(0,0)}
  window.GameNightHome=()=>{navigate('homeScreen');$('homeTongitsResume').classList.toggle('hidden',!(typeof game!=="undefined"&&game));$('homeMahjongResume').classList.toggle('hidden',!state)};
  function save(){try{localStorage.setItem('gameNightMahjongV1',JSON.stringify(state))}catch(e){status('Unable to save Mahjong game. Check available device storage.')}}
  try{const raw=localStorage.getItem('gameNightMahjongV1');if(raw){const data=JSON.parse(raw);if(data?.type==='mahjong'&&Array.isArray(data.players))state=data;}}catch(e){console.warn('Mahjong save unavailable',e)}
@@ -53,7 +53,7 @@
  function animate(transfers){for(const t of transfers){const from=$('mjCards').children[t.from],to=$('mjCards').children[t.to];if(!from||!to)continue;const a=from.getBoundingClientRect(),b=to.getBoundingClientRect(),el=document.createElement('span');el.className='mj-flying-money';el.textContent='💸';el.style.left=`${a.left+a.width/2}px`;el.style.top=`${a.top+a.height/2}px`;el.style.setProperty('--dx',`${b.left+b.width/2-a.left-a.width/2}px`);el.style.setProperty('--dy',`${b.top+b.height/2-a.top-a.height/2}px`);document.body.append(el);setTimeout(()=>el.remove(),850)}}
  $('homeTongits').onclick=()=>{if(typeof game!=="undefined"&&game){navigate('gameScreen');renderGame()}else{showFreshSetup();navigate('setupScreen');$('setupScreen').querySelector('h1').textContent='Tongits'}};
  $('homeTongitsResume').onclick=()=>{navigate('gameScreen');renderGame()};
- $('homeMahjong').onclick=()=>{if(state){if(!confirm('Start a new Mahjong game? Your current Mahjong session will be replaced.'))return;state=null}rules=E.defaults();count=4;setup()};
+ $('homeMahjong').onclick=async()=>{if(state){if(!await window.GameNightUI.confirm('Replace the current Mahjong session?','New Mahjong Game','New Game',true))return;state=null}rules=E.defaults();count=4;setup()};
  $('homeMahjongResume').onclick=showGame;
  $('mjBackHome').onclick=window.GameNightHome;$('mjGameHome').onclick=window.GameNightHome;
  $('tongitsSetupHome').onclick=window.GameNightHome;$('tongitsGameHome').onclick=window.GameNightHome;
@@ -61,16 +61,16 @@
  $('mjPotEnabled').onchange=()=>{$('mjPotOptions').hidden=!$('mjPotEnabled').checked};
  $('mjBonusEditor').addEventListener('input',editBonus);$('mjBonusEditor').addEventListener('change',editBonus);$('mjBonusEditor').addEventListener('click',editBonus);['input','change','click'].forEach(evt=>$('mjSettingsBonusEditor').addEventListener(evt,editBonus));
  $('mjAddBonus').onclick=()=>{rules.bonuses.push({id:'b'+Date.now(),name:'New Bonus',amount:2,scope:'all'});renderBonusEditor()};
- $('mjStart').onclick=()=>{try{readRules();state=E.start(setupPlayers.slice(0,count).map(x=>x.name),rules,$('mjCurrency').value);state.players.forEach((p,i)=>p.avatar=structuredClone(setupPlayers[i].avatar));save();showGame()}catch(e){alert(e.message)}};
+ $('mjStart').onclick=()=>{try{readRules();state=E.start(setupPlayers.slice(0,count).map(x=>x.name),rules,$('mjCurrency').value);state.players.forEach((p,i)=>p.avatar=structuredClone(setupPlayers[i].avatar));save();showGame()}catch(e){window.GameNightUI.notice(e.message)}};
  $('mjWinner').onchange=()=>{refreshPayer();preview()};$('mjPaymentMode').onchange=()=>{refreshPayer();preview()};$('mjPayer').onchange=preview;$('mjWinBase').oninput=preview;
  $('mjWinBonuses').onchange=e=>{if(e.target.dataset.bonus){selectedBonuses=[...$('mjWinBonuses').querySelectorAll('input:checked')].map(x=>x.dataset.bonus);renderWinBonuses();refreshPayer();preview()}};
- $('mjRecord').onclick=()=>{try{const winner=+$('mjWinner').value, payer=+$('mjPayer').value;const transfers=E.round(state,{winner,payer,payment:$('mjPaymentMode').value,base:$('mjWinBase').value,bonusIds:selectedBonuses});animate(transfers);save();closeAction();setTimeout(renderGame,520)}catch(e){alert(e.message)}};
- $('mjAward').onclick=()=>{try{const winner=+$('mjPotWinner').value;if(!confirm(`Award ${fmt(state.pot)} to ${state.players[winner].name}?`))return;E.awardPot(state,winner);if(typeof playSoundEffect==='function')playSoundEffect('potwin');save();renderGame()}catch(e){alert(e.message)}};
- $('mjQuickPay').onclick=()=>{try{const t=E.quickPay(state,+$('mjPayFrom').value,+$('mjPayTo').value,$('mjPayAmount').value);animate([t]);save();closeAction();setTimeout(renderGame,520)}catch(e){alert(e.message)}};
- $('mjUndo').onclick=()=>{if(!confirm('Undo the last Mahjong action?'))return;try{E.undo(state);save();renderGame()}catch(e){alert(e.message)}};
+ $('mjRecord').onclick=()=>{try{const winner=+$('mjWinner').value, payer=+$('mjPayer').value;const transfers=E.round(state,{winner,payer,payment:$('mjPaymentMode').value,base:$('mjWinBase').value,bonusIds:selectedBonuses});animate(transfers);save();closeAction();setTimeout(renderGame,520)}catch(e){window.GameNightUI.notice(e.message)}};
+ $('mjAward').onclick=async()=>{try{const winner=+$('mjPotWinner').value;if(!await window.GameNightUI.confirm(`Award ${fmt(state.pot)} to ${state.players[winner].name}?`,'Award Mahjong Pot','Award Pot'))return;E.awardPot(state,winner);if(typeof playSoundEffect==='function')playSoundEffect('potwin');save();renderGame()}catch(e){window.GameNightUI.notice(e.message)}};
+ $('mjQuickPay').onclick=()=>{try{const t=E.quickPay(state,+$('mjPayFrom').value,+$('mjPayTo').value,$('mjPayAmount').value);animate([t]);save();closeAction();setTimeout(renderGame,520)}catch(e){window.GameNightUI.notice(e.message)}};
+ $('mjUndo').onclick=async()=>{if(!await window.GameNightUI.confirm('Undo the last Mahjong action?','Undo Action','Undo'))return;try{E.undo(state);save();renderGame()}catch(e){window.GameNightUI.notice(e.message)}};
  function prepareMahjongRules(){const panel=$('mjSettings');panel.classList.remove('hidden');rules=structuredClone(state.rules);$('mjSettingsBase').value=rules.base;$('mjSettingsPayment').value=rules.payment;$('mjSettingsPotEnabled').checked=rules.potEnabled;$('mjSettingsPerRound').value=rules.perRound;renderBonusEditor('mjSettingsBonusEditor')};$('mjSettingsAddBonus').onclick=()=>{rules.bonuses.push({id:'b'+Date.now(),name:'New Bonus',amount:2,scope:'all'});renderBonusEditor('mjSettingsBonusEditor')};
- $('mjSaveSettings').onclick=()=>{rules.base=Math.max(0,L.round($('mjSettingsBase').value));rules.payment=$('mjSettingsPayment').value;rules.potEnabled=$('mjSettingsPotEnabled').checked;rules.perRound=Math.max(0,L.round($('mjSettingsPerRound').value));if(state.rules.potEnabled&&!rules.potEnabled&&state.pot>0){alert('Award the remaining pot before disabling it.');return}if(!state.rules.potEnabled&&rules.potEnabled){rules.initial=0;alert('Pot enabled. Initial contributions are not retroactively collected; future round contributions will apply.')}state.rules=structuredClone(rules);save();closeMjDialog('mjSettingsDialog');renderGame()};
- $('mjSettlement').onclick=()=>{if(state.pot>0){alert(`There is still ${fmt(state.pot)} in the pot. Award it before final settlement.`);return}const payments=L.settlement(state.players);$('mjSettlementList').innerHTML=payments.map(t=>`<div>${esc(state.players[t.from].name)} → ${esc(state.players[t.to].name)} <b>${fmt(t.amount)}</b></div>`).join('')||'Everyone is settled.';$('mjSettlementDialog').classList.remove('hidden')};
+ $('mjSaveSettings').onclick=()=>{rules.base=Math.max(0,L.round($('mjSettingsBase').value));rules.payment=$('mjSettingsPayment').value;rules.potEnabled=$('mjSettingsPotEnabled').checked;rules.perRound=Math.max(0,L.round($('mjSettingsPerRound').value));if(state.rules.potEnabled&&!rules.potEnabled&&state.pot>0){window.GameNightUI.notice('Award the remaining pot before disabling it.');return}if(!state.rules.potEnabled&&rules.potEnabled){rules.initial=0;window.GameNightUI.notice('Pot enabled. Initial contributions are not retroactively collected; future round contributions will apply.')}state.rules=structuredClone(rules);save();closeMjDialog('mjSettingsDialog');renderGame()};
+ $('mjSettlement').onclick=()=>{if(state.pot>0){window.GameNightUI.notice(`There is still ${fmt(state.pot)} in the pot. Award it before final settlement.`);return}const payments=L.settlement(state.players);$('mjSettlementList').innerHTML=payments.map(t=>`<div>${esc(state.players[t.from].name)} → ${esc(state.players[t.to].name)} <b>${fmt(t.amount)}</b></div>`).join('')||'Everyone is settled.';$('mjSettlementDialog').classList.remove('hidden')};
  $('mjCloseSettlement').onclick=()=>$('mjSettlementDialog').classList.add('hidden');
 
  // Mahjong rules and settings use the same iOS-style header controls as Tongits.
@@ -127,16 +127,17 @@
  $('mjAvatarFile').addEventListener('change',async e=>{
   const file=e.target.files?.[0];if(!file||mjAvatarTarget<0)return;
   try{const data=await GameNightAvatar.resizePhoto(file);setupPlayers[mjAvatarTarget].avatar={type:'photo',value:data};closeMjDialog('mjAvatarDialog');renderNames()}
-  catch(err){alert(err.message||'Unable to load photo.')}finally{e.target.value=''}
+  catch(err){window.GameNightUI.notice(err.message||'Unable to load photo.')}finally{e.target.value=''}
  });
  $('mjFunCustomLine').oninput=e=>{if(mjFunTarget<0)return;funMode.playerLines[`mahjong:${mjFunTarget}:${state.players[mjFunTarget].name}`]=e.target.value;funSave()};
  $('mjClipGrid').addEventListener('click',e=>{const btn=e.target.closest('[data-mj-clip]');if(btn && typeof funMode!=='undefined' && funMode.enabled)gnPlayClip(btn.dataset.mjClip,{manual:true});});
  document.querySelectorAll('[data-mj-fun]').forEach(btn=>btn.onclick=()=>{if(mjFunTarget<0)return;const type=btn.dataset.mjFun,name=state.players[mjFunTarget].name;if(type==='stop'){if('speechSynthesis' in window)speechSynthesis.cancel();gnStopClip();return}if(['crickets','laugh','clap','hype'].includes(type))funEffects(type);let line='';if(type==='custom')line=($('mjFunCustomLine').value||'Hey {name}, hurry up!').replaceAll('{name}',name);else if(['hurry','roast','hype'].includes(type))line=funLine(type,name);if(line)funSpeak(line)});
  $('mjFunTest').onclick=()=>{if(typeof funSpeak==='function')funSpeak('Hoy, welcome to Mahjong! Bilisan mo, please!')};
- $('mjNewGame').onclick=()=>{if(state&&!confirm('Start a new Mahjong game? Your current Mahjong session and history will be replaced once you start the new game.'))return;closeMjDialog('mjSettingsDialog');setup()};
- $('mjClearGame').onclick=()=>{
-  if(!confirm('Delete this Mahjong session and its history? Tongits data will not be affected.'))return;
-  state=null;localStorage.removeItem('gameNightMahjongV1');closeMjDialog('mjSettingsDialog');window.GameNightHome();
+ $('mjNewGame').onclick=async()=>{if(state&&!await window.GameNightUI.confirm('Your current Mahjong game and history will be replaced when you start a new game.','New Mahjong Game','New Game',true))return;closeMjDialog('mjSettingsDialog');setup()};
+ $('mjClearGame').onclick=async()=>{
+  if(!await window.GameNightUI.confirm('Delete the Mahjong session and history? Other games and shared preferences remain saved.','Clear Mahjong Data','Delete Mahjong',true))return;
+  try{localStorage.removeItem('gameNightMahjongV1')}catch(error){window.GameNightUI.notice('Unable to clear Mahjong data from this device.');return}
+  state=null;closeMjDialog('mjSettingsDialog');window.GameNightSharedSettings?.restore();window.GameNightHome();
  };
 
  

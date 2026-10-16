@@ -183,8 +183,6 @@ async function clearAllAppData() {
     } catch(error) { console.error("Unable to clear durable game:",error); return false; }
     try {
         localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem("tongitsTrackerTheme");
-        localStorage.removeItem("tongitsTrackerSoundSettingsV1");
         localStorage.removeItem("tongitsShowBreakdown");
         game = null;
         return true;
